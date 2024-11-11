@@ -13,27 +13,27 @@ import jakarta.persistence.OneToMany;
 
 public class Post{
 	
-/*	@Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
-	private Long id;*/
+	private Long id;
 	
-	//@Column(name = "owner", unique = false, nullable = false)
+	@Column(name = "owner", unique = false, nullable = false)
 	private String user;
 	
-	//@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
 	private ArrayList<String> likes;
 	
-	//@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
 	private ArrayList<Comment> comments;
 	
-	//@Column(name = "imagePath", unique = false, nullable = false)
+	@Column(name = "imagePath", unique = false, nullable = false)
 	private String imagePath;
 	
-	//@Column(name = "time", unique = false, nullable = false)
+	@Column(name = "time", unique = false, nullable = false)
 	private LocalDateTime time;
 	
-	//@Column(name = "content", unique = false, nullable = false)
+	@Column(name = "content", unique = false, nullable = false)
 	private String content;
 
 	public Post() {

@@ -1,1 +1,21 @@
-<p>login works!</p>
+<html>
+	<header>Login</header>
+	<p></p>
+	<form>
+		<mat-label>Username or email:</mat-label>
+		<input matInput name = "credentials" [(ngModel)]="credentials">
+		<p></p>
+		<mat-label>Password:</mat-label>
+		<input matInput name = "password" type  = "password" [(ngModel)]="password">
+		<p></p>
+		<mat-label>Click here to log in:</mat-label>
+		<button mat-flat-button  (click) = "loginf()">Login</button>
+		<p></p>
+		<mat-label>Not a user? Register here:</mat-label>
+		<button mat-flat-button  (click) = "register()">Register</button>
+		<p></p>
+		<mat-label>...or continue as a guest:</mat-label>
+		<button mat-flat-button click = "guestLogin()">Continue</button>
+		<p></p>
+	</form>
+</html>

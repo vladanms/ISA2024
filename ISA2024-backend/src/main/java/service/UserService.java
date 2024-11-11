@@ -69,10 +69,10 @@ public class UserService {
 		return users.findByEmail(email);
 	}
 	
-	public ArrayList<Post> getPosts(String username)
+/*	public ArrayList<Post> getPosts(String username)
 	{
 		return users.findByUsername(username).getPosts();
-	}
+	}*/
 	
 	public String generateVerification() 
 	 { 
@@ -89,7 +89,7 @@ public class UserService {
 	  return sb.toString(); 
 	 }
 	
-	public boolean CreatePost(User user, String content, String image)
+/*	public boolean CreatePost(User user, String content, String image)
 	{
 		Post newPost = new Post(user.getUsername(), image, content);
 		ArrayList<Post> posts = user.getPosts();
@@ -128,5 +128,5 @@ public class UserService {
 			posts.addAll(u.getPosts());
 		}
 		return posts;
-	}	
+	}	*/
 }

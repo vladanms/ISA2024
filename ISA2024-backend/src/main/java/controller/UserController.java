@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dto.LoginDTO;
 import dto.PostDTO;
+import dto.RegisterDTO;
 import dto.UserDTO;
 import service.UserService;
 import model.Post;
@@ -48,7 +49,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<String> register(@RequestBody UserDTO userDTO) throws MessagingException, UnsupportedEncodingException
+	public ResponseEntity<String> register(@RequestBody RegisterDTO userDTO) throws MessagingException, UnsupportedEncodingException
 	{
 		User user = new User();
 		
@@ -60,7 +61,7 @@ public class UserController {
 		user.setAddress(userDTO.getAddress());
 		user.setCity(userDTO.getCity());
 		user.setCountry(userDTO.getCountry());
-		user.setPosts(null);
+		//user.setPosts(null);
 		user.setFollowed(null);
 		user.setFollowers(null);
 		user.setVerification(userService.generateVerification());
@@ -77,7 +78,7 @@ public class UserController {
 		return new ResponseEntity<>("Succesfully registered", HttpStatus.OK);
 	}
 	
-	@PutMapping("/createPost")
+/*	@PutMapping("/createPost")
 	public ResponseEntity<String> createPost(@RequestBody PostDTO postDTO) throws MessagingException, UnsupportedEncodingException
 	{
 		
@@ -96,5 +97,5 @@ public class UserController {
 	{ 
 		return userService.getAllPosts(); 
 	}
-	
+	*/
 }

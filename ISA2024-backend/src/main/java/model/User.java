@@ -53,7 +53,7 @@ public class User {
 	private ArrayList<String> followed;
 	
 	//@OneToMany(targetEntity = Post.class, fetch = FetchType.EAGER)
-	private ArrayList<Post> posts;
+	//private ArrayList<Post> posts;
 
 	
 	
@@ -62,8 +62,7 @@ public class User {
 	}
 
 	public User(String username, String password, String email, String name, String surname, String address,
-			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed,
-			ArrayList<Post> posts) {
+			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -76,7 +75,7 @@ public class User {
 		this.verification = verification;
 		this.followers = followers;
 		this.followed = followed;
-		this.posts = posts;
+		//this.posts = posts;
 		this.authorized = false;
 	}
 
@@ -176,13 +175,13 @@ public class User {
 		this.followed = followed;
 	}
 
-	public ArrayList<Post> getPosts() {
+	/*public ArrayList<Post> getPosts() {
 		return posts;
 	}
 
 	public void setPosts(ArrayList<Post> posts) {
 		this.posts = posts;
-	}
+	}*/
 
 	public boolean isAuthorized() {
 		return authorized;

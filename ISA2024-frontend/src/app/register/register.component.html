@@ -1,1 +1,46 @@
-<p>register works!</p>
+<html>
+	<header>Registration</header>
+	<p></p>
+
+	<form>
+		<mat-label>Username: </mat-label>
+		<input matInput name="name"[(ngModel)]="username">
+		<p></p>
+		
+		<mat-label>Password: </mat-label>
+		<input matInput name="password" type = "password" [(ngModel)]="password">
+		<p></p>
+		
+		<mat-label>Repeat password: </mat-label>
+		<input matInput name="repeat_password" type = "password" [(ngModel)]="password">
+		<p></p>
+		
+		<mat-label>E-mail: </mat-label>
+		<input matInputname="email"[(ngModel)]="email">
+		<p></p>
+		
+		<mat-label>Name: </mat-label>
+		<input matInput name="name"[(ngModel)]="name">
+		<p></p>
+		
+		<mat-label>Surname: </mat-label>
+		<input matInput name="surname"[(ngModel)]="surname">
+		<p></p>
+		
+		<mat-label>Address: </mat-label>
+		<input matInput name="address"[(ngModel)]="address">
+		<p></p>
+		
+		<mat-label>City: </mat-label>
+		<input matInput name="city"[(ngModel)]="city">
+		<p></p>
+		
+		<mat-label>Country: </mat-label>
+		<input matInput name="country"[(ngModel)]="country">
+		<p></p>
+
+		<button mat-flat-button (click) = "submit()"></button>
+	</form>
+	<p></p>
+	<button mat-flat-button (click)="back()">Back</button>
+</html>

@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import model.Post;
 
-public class UserDTO {
+public class RegisterDTO {
 
 
 	private String username;
@@ -19,19 +19,13 @@ public class UserDTO {
 	private String address;
 	private String city;
 	private String country;
-	private ArrayList<String> followers;
-	private ArrayList<String> followed;
-	private ArrayList<Post> posts;
 
-	
-	
-	public UserDTO() {
+	public RegisterDTO() {
 		super();
 	}
 
-	public UserDTO(String username, String password, String email, String name, String surname, String address,
-			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed,
-			ArrayList<Post> posts) {
+	public RegisterDTO(String username, String password, String email, String name, String surname, String address,
+			String city, String country, String verification) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -41,9 +35,7 @@ public class UserDTO {
 		this.address = address;
 		this.city = city;
 		this.country = country;
-		this.followers = followers;
-		this.followed = followed;
-		this.posts = posts;
+
 	}
 
 	public String getUsername() {
@@ -108,31 +100,5 @@ public class UserDTO {
 
 	public void setCountry(String country) {
 		this.country = country;
-	}
-
-	public ArrayList<String> getFollowers() {
-		return followers;
-	}
-
-	public void setFollowers(ArrayList<String> followers) {
-		this.followers = followers;
-	}
-
-	public ArrayList<String> getFollowed() {
-		return followed;
-	}
-
-	public void setFollowed(ArrayList<String> followed) {
-		this.followed = followed;
-	}
-
-	public ArrayList<Post> getPosts() {
-		return posts;
-	}
-
-	public void setPosts(ArrayList<Post> posts) {
-		this.posts = posts;
-	}
-	
-	
+	}	
 }
