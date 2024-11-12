@@ -25,17 +25,12 @@ export class CreatePostComponent implements OnInit {
 	
 	submit(){
 		
-	/*	if(this.content == "" || this.location_x == null || this.location_y == null || this.image == null)
+		if(this.content == "" || this.location_x == null || this.location_y == null || this.image == null)
 	   {
 		   this.toastr.error("Please fill out all fields", "Error");
 	   }
-	   if(this.password != this.repeat_password)
-	   {
-		   this.toastr.error("Passwords don't match", "Error");
-	   }
-	   
-		this.registerService.register(this.username,this.password,this.email,this.name,this.surname
-		,this.address,this.city,this.country).subscribe(
+
+		this.createPostService.create_post(this.owner,this.image,this.location_x,this.location_y).subscribe(
       {
         next: (res) => 
         {
@@ -46,7 +41,7 @@ export class CreatePostComponent implements OnInit {
         {
 	     this.toastr.error("Error registering; make sure all required fields are unique", "error");
        }
-    	});*/
+    	});
 	};
 	
 	back(){};

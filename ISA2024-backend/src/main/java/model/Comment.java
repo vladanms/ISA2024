@@ -2,7 +2,7 @@ package model;
 
 public class Comment {
 
-	private String user;
+	private String users;
 	private String content;
 	
 	
@@ -11,20 +11,20 @@ public class Comment {
 	}
 
 
-	public Comment(String user, String content) {
+	public Comment(String users, String content) {
 		super();
-		this.user = user;
+		this.users = users;
 		this.content = content;
 	}
 
 
-	public String getUser() {
-		return user;
+	public String getUsers() {
+		return users;
 	}
 
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsers(String users) {
+		this.users = users;
 	}
 
 

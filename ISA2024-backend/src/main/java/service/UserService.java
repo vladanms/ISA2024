@@ -7,15 +7,16 @@ import java.util.ArrayList;
 import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import dto.LoginDTO;
 import model.Post;
 import model.User;
 import repository.UserRepository;
 
+@Service
 public class UserService {
 
-	@Autowired
 	private UserRepository users;
 	
 	public String register(User user) throws MessagingException, UnsupportedEncodingException {
@@ -79,7 +80,7 @@ public class UserService {
 	 { 
 
 	  String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz0123456789"; 
-	  StringBuilder sb = new StringBuilder(19); 
+	  StringBuilder sb = new StringBuilder(20); 
 	 
 	  for (int i = 0; i < 19; i++) { 
 

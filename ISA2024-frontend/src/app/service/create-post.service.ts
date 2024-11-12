@@ -12,12 +12,12 @@ export class CreatePostService {
 	
 	  constructor(private http: HttpClient) { }
 	  
-	  create_post(content : string, ): Observable<any> {
-		let userDTO = {
+	  create_post(content : string, image : File, location_x : number, location_y : number): Observable<any> {
+		let postDTO = {
 
 		};
 		
-		return this.http.post<any>(this.apiHost + 'user/userRegister', userDTO, {headers: this.headers});
+		return this.http.post<any>(this.apiHost + 'user/userRegister', postDTO, {headers: this.headers});
 	
 	}
 }

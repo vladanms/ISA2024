@@ -1,5 +1,6 @@
 package dto;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -8,10 +9,10 @@ import model.Comment;
 public class PostDTO {
 
 	
-	private String user;
+	private String owner;
 	private ArrayList<String> likes;
 	private ArrayList<Comment> comments;
-	private String imagePath;
+	private File imagePath;
 	private LocalDateTime time;
 	private String content;
 	private Float location_x;
@@ -25,10 +26,10 @@ public class PostDTO {
 	
 
 
-	public PostDTO(String user, ArrayList<String> likes, ArrayList<Comment> comments, String imagePath,
+	public PostDTO(String owner, ArrayList<String> likes, ArrayList<Comment> comments, File imagePath,
 			LocalDateTime time, String content, Float location_x, Float location_y) {
 		super();
-		this.user = user;
+		this.owner = owner;
 		this.likes = likes;
 		this.comments = comments;
 		this.imagePath = imagePath;
@@ -41,13 +42,13 @@ public class PostDTO {
 
 
 
-	public String getUser() {
-		return user;
+	public String getOwner() {
+		return owner;
 	}
 
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
 
@@ -71,12 +72,12 @@ public class PostDTO {
 	}
 
 
-	public String getImagePath() {
+	public File getImagePath() {
 		return imagePath;
 	}
 
 
-	public void setImagePath(String imagePath) {
+	public void setImagePath(File imagePath) {
 		this.imagePath = imagePath;
 	}
 

@@ -19,7 +19,7 @@ public class Post{
 	private Long id;
 	
 	@Column(name = "owner", unique = false, nullable = false)
-	private String user;
+	private String owner;
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	private ArrayList<String> likes;
@@ -35,33 +35,58 @@ public class Post{
 	
 	@Column(name = "content", unique = false, nullable = false)
 	private String content;
+	
+	@Column(name = "location_x", unique = false, nullable = false)
+	private Float location_x;
+	
+	@Column(name = "location_y", unique = false, nullable = false)
+	private Float location_y;
+
 
 	public Post() {
 		super();
 	}
 
-	public Post(String user, String imagePath, String content) {
+	public Post(String owner, String imagePath, String content, Float location_x, Float location_y) {
 		super();
-		this.user = user;
+		this.owner = owner;
 		this.imagePath = imagePath;
 		this.content = content;
 		this.time = LocalDateTime.now();
+		this.location_x = location_x;
+		this.location_y = location_y;
 	}
 
-/*	public Long getId() {
+	public Float getLocation_x() {
+		return location_x;
+	}
+
+	public void setLocation_x(Float location_x) {
+		this.location_x = location_x;
+	}
+
+	public Float getLocation_y() {
+		return location_y;
+	}
+
+	public void setLocation_y(Float location_y) {
+		this.location_y = location_y;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}*/
-
-	public String getUser() {
-		return user;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
 	public ArrayList<String> getLikes() {
@@ -103,6 +128,8 @@ public class Post{
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
+	
 	
 	
 	
