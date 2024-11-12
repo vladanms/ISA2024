@@ -19,7 +19,7 @@ export class LoginService {
 		  password: password
 	  }
 	  
-	      return this.http.post<any>(this.apiHost + 'user/login', loginDTO, {headers: this.headers});
+	      return this.http.post<any>(this.apiHost + 'user/userLogin', loginDTO, {headers: this.headers});
 	  }
 	  
 	

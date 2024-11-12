@@ -12,7 +12,7 @@
 		<p></p>
 		
 		<mat-label>Repeat password: </mat-label>
-		<input matInput name="repeat_password" type = "password" [(ngModel)]="password">
+		<input matInput name="repeat_password" type = "password" [(ngModel)]="repeat_password">
 		<p></p>
 		
 		<mat-label>E-mail: </mat-label>
@@ -39,7 +39,7 @@
 		<input matInput name="country"[(ngModel)]="country">
 		<p></p>
 
-		<button mat-flat-button (click) = "submit()"></button>
+		<button mat-flat-button (click) = "submit()">Submit</button>
 	</form>
 	<p></p>
 	<button mat-flat-button (click)="back()">Back</button>

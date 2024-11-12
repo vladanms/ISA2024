@@ -37,11 +37,11 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
-		if(userService.login(loginDTO.getCredentials(), loginDTO.getCredentials()).equals("username")) {
+		if(userService.login(loginDTO).equals("username")) {
 			currentUser = userService.getByUsername(loginDTO.getCredentials());
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		if(userService.login(loginDTO.getCredentials(), loginDTO.getCredentials()) == "email") {
+		if(userService.login(loginDTO) == "email") {
 			currentUser = userService.getByEmail(loginDTO.getCredentials());
 			return new ResponseEntity<>(HttpStatus.OK);
 		}

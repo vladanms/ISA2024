@@ -14,6 +14,8 @@ public class PostDTO {
 	private String imagePath;
 	private LocalDateTime time;
 	private String content;
+	private Float location_x;
+	private Float location_y;
 	
 	
 	public PostDTO() {
@@ -24,7 +26,7 @@ public class PostDTO {
 
 
 	public PostDTO(String user, ArrayList<String> likes, ArrayList<Comment> comments, String imagePath,
-			LocalDateTime time, String content) {
+			LocalDateTime time, String content, Float location_x, Float location_y) {
 		super();
 		this.user = user;
 		this.likes = likes;
@@ -32,6 +34,8 @@ public class PostDTO {
 		this.imagePath = imagePath;
 		this.time = time;
 		this.content = content;
+		this.location_x = location_x;
+		this.location_y = location_y;
 	}
 
 
@@ -95,8 +99,31 @@ public class PostDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+
+
+
+
+	public Float getLocation_x() {
+		return location_x;
+	}
+
+
+
+
+	public void setLocation_x(Float location_x) {
+		this.location_x = location_x;
+	}
+
+
+	public Float getLocation_y() {
+		return location_y;
+	}
+
+
+	public void setLocation_y(Float location_y) {
+		this.location_y = location_y;
+	}
 	
 	
 	
 }
-

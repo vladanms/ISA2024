@@ -1,0 +1,23 @@
+<html>
+	<header>Create post</header>
+	<p></p>
+	<form>
+		<mat-label>Share your thoughts:</mat-label>
+		<input matInput name = "content" [(ngModel)]="content">
+		<p></p>
+		<mat-label>Enter your location:</mat-label>/		<p></p>
+		<mat-label>X:</mat-label>
+		<input matInput name = "location_x" [(ngModel)] = "location_x">
+		<mat-label>Y:</mat-label>
+		<input matInput name = "location_y" [(ngModel)] = "location_x">
+		<input matInput type="file" class="file-upload"[(ngModel)]="image">
+		<p></p>
+		<button mat-flat-button  (click) = "submit()">Post</button>
+		<p></p>
+
+		<p></p>/
+		<button mat-flat-button (click) = "back()">Back</button>
+		<p></p>
+	</form>
+</html>
+

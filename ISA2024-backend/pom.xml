@@ -97,15 +97,19 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+    		<groupId>org.springframework</groupId>
+   		 	<artifactId>spring-test</artifactId>
+		</dependency>
 		 <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
  </dependency>
-		 <dependency>
+	<!--	 <dependency>
 		 	<groupId>com.example</groupId>
 		 	<artifactId>ISA-backend</artifactId>
 		 	<version>0.0.1-SNAPSHOT</version>
-		 </dependency>
+		 </dependency> -->
 	</dependencies>
 
 	<build>

@@ -8,6 +8,7 @@ import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import dto.LoginDTO;
 import model.Post;
 import model.User;
 import repository.UserRepository;
@@ -30,28 +31,28 @@ public class UserService {
 		return "success";
 	}
 	
-	public String login(String credentials, String password)	
+	public String login(LoginDTO loginDTO)	
 	{
-		User toLogin = users.findByUsername(credentials);
+		User toLogin = users.findByUsername(loginDTO.getCredentials());
 		/*if(toLogin.isAuthorized() == false)
 		{
 			return null;
 		}*/
 		if(toLogin != null)
 		{
-			if(toLogin.getPassword() == password)
+			if(toLogin.getPassword() == loginDTO.getPassword())
 			{
 				return "username";
 			}
 		}
-		toLogin = users.findByEmail(credentials);
+		toLogin = users.findByEmail(loginDTO.getCredentials());
 		/*if(toLogin.isAuthorized() == false)
 		{
 			return null;
 		}*/
 		if(toLogin != null)
 		{
-			if(toLogin.getPassword() == password)
+			if(toLogin.getPassword() == loginDTO.getPassword())
 			{
 				return "email";
 			}

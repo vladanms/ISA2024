@@ -42,6 +42,7 @@ constructor(private registerService: RegisterService, private router: Router, pr
         next: (res) => 
         {
           this.toastr.success("Succesfully registered", "success");
+          this.router.navigate(['/login']);
         },
         error: (e) => 
         {

@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +22,8 @@ import { LoginComponent } from './login/login.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { PostComponent } from './post/post.component';
 import { GuestPageComponent } from './guest-page/guest-page.component';
+import { CreatePostComponent } from './create-post/create-post.component';
+import { MyPostsComponent } from './my-posts/my-posts.component';
 
 @NgModule({
   declarations: [
@@ -29,10 +32,13 @@ import { GuestPageComponent } from './guest-page/guest-page.component';
     LoginComponent,
     HomepageComponent,
     PostComponent,
-    GuestPageComponent
+    GuestPageComponent,
+    CreatePostComponent,
+    MyPostsComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
     ToastrModule.forRoot(),

@@ -6,14 +6,16 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
 
   credentials: string = "";
   password: string = "";
   
-    ngOnInit(): void { }
+    ngOnInit(): void {		
+		localStorage.setItem('currentUser', '');
+	 }
 
   
   constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) { }
@@ -25,14 +27,16 @@ export class LoginComponent implements OnInit {
        	 {
          	 next: (res) => {
          	 localStorage.setItem('currentUser', this.credentials);
+         	 console.log("logged");
          	 
          	 this.router.navigate(['/homepage']);
          	 },
-         	 error: (e) => {
+         	 error: () => {
+				  console.log("failed");
 				  this.toastr.error("Invalid credentials", "Error");
           }
       });
-	}
+     }
 	
 	guestLogin()
   	{
