@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import jakarta.persistence.Column;
@@ -44,6 +45,9 @@ public class User {
 	@Column(name = "verification", nullable = false)
 	private String verification;
 	
+	@Column(name = "lastLogged", nullable = false)
+	private LocalDateTime lastLogged;
+	
 	private boolean authorized;
 	
 	//@OneToMany(fetch = FetchType.EAGER)
@@ -62,7 +66,7 @@ public class User {
 	}
 
 	public User(String username, String password, String email, String name, String surname, String address,
-			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed) {
+			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed, LocalDateTime lastLoggedd) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -77,6 +81,7 @@ public class User {
 		this.followed = followed;
 		//this.posts = posts;
 		this.authorized = false;
+		this.lastLogged = lastLogged;
 	}
 
 	public Long getId() {
@@ -190,6 +195,15 @@ public class User {
 	public void setAuthorized(boolean authorized) {
 		this.authorized = authorized;
 	}
+
+	public LocalDateTime getLastLogged() {
+		return lastLogged;
+	}
+
+	public void setLastLogged(LocalDateTime lastLogged) {
+		this.lastLogged = lastLogged;
+	}
+	
 	
 	
 	
