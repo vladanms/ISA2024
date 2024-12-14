@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) { }
   
   
-  	loginf()
+  /*	loginf()
   	{
 	  	 this.loginService.login(this.credentials, this.password).subscribe(
        	 {
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 				  this.toastr.error("Invalid credentials", "Error");
           }
       });
-     }
+     }*/
 	
 	guestLogin()
   	{

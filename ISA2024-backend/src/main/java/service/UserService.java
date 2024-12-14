@@ -12,6 +12,7 @@ import main.model.UserRegistered;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dto.LoginDTO;
@@ -26,6 +27,13 @@ public class UserService {
 	private UserRepository users;
 	@Autowired
 	private JavaMailSender sender;
+	@Autowired
+    private final PasswordEncoder passwordEncoder;
+	
+    public UserService(UserRepository users, PasswordEncoder passwordEncoder) {
+        this.users = users;
+        this.passwordEncoder = passwordEncoder;
+    }
 	
 	public String register(User user) throws MessagingException, UnsupportedEncodingException {
 		User toRegister = users.findByEmail(user.getEmail());
@@ -36,7 +44,8 @@ public class UserService {
 		if(toRegister != null) {
 			return "usernameError";
 		}
-		users.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        users.save(user);
 		return "success";
 	}
 	
