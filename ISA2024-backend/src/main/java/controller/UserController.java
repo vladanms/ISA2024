@@ -1,14 +1,12 @@
 package controller;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
 import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,7 +27,7 @@ import model.Post;
 import model.User;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", allowCredentials = "")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "user")
 public class UserController {
 	
@@ -39,7 +37,7 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
-	  if(userService.login(loginDTO).equals("username")) {
+		if(userService.login(loginDTO).equals("username")) {
 			currentUser = userService.getByUsername(loginDTO.getCredentials());
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
@@ -49,17 +47,6 @@ public class UserController {
 		}
 		return new ResponseEntity<>("Invalid username or password",HttpStatus.BAD_REQUEST);
 	}
-	
-	@PostMapping("/logout")
-	public String logout(@Param("Username") String username)
-	{
-	    if (userService.logTime(username)) {
-	        return "success";
-	    } else {
-	        return "error";
-	    }
-	}
-	
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody RegisterDTO userDTO) throws MessagingException, UnsupportedEncodingException
@@ -78,7 +65,6 @@ public class UserController {
 		user.setFollowed(null);
 		user.setFollowers(null);
 		user.setVerification(userService.generateVerification());
-		user.setLastLogged(null);
 		
 		if(userService.register(user) == "usernameError")
 		{
@@ -90,15 +76,6 @@ public class UserController {
 		}
 
 		return new ResponseEntity<>("Succesfully registered", HttpStatus.OK);
-	}
-	
-	@GetMapping("/verify")
-	public String verifyUser(@Param("verification") String verification) {
-	    if (userService.verify(verification)) {
-	        return "success";
-	    } else {
-	        return "error";
-	    }
 	}
 	
 /*	@PutMapping("/createPost")
