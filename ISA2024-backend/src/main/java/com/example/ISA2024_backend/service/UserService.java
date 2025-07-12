@@ -1,23 +1,32 @@
-package service;
+package com.example.ISA2024_backend.service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import jakarta.mail.MessagingException;
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import dto.LoginDTO;
-import model.Post;
-import model.User;
-import repository.UserRepository;
+import com.example.ISA2024_backend.dto.LoginDTO;
+import com.example.ISA2024_backend.model.User;
+import com.example.ISA2024_backend.repository.UserRepository;
 
 @Service
 public class UserService {
 
 	private UserRepository users;
+//	private JavaMailSender sender;
+ //   private final PasswordEncoder passwordEncoder;
+	
+/*    @Autowired
+    public UserService(UserRepository users, PasswordEncoder passwordEncoder) {
+        this.users = users;
+        this.passwordEncoder = passwordEncoder;
+    }*/
 	
 	public String register(User user) throws MessagingException, UnsupportedEncodingException {
 		User toRegister = users.findByEmail(user.getEmail());

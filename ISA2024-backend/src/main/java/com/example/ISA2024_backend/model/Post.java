@@ -1,15 +1,19 @@
-package model;
+package com.example.ISA2024_backend.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.example.ISA2024_backend.model.Comment;
+
+
 
 public class Post{
 	
@@ -97,11 +101,11 @@ public class Post{
 		this.likes = likes;
 	}
 
-	public ArrayList<model.Comment> getComments() {
+	public ArrayList<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<model.Comment> comments) {
+	public void setComments(ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
 

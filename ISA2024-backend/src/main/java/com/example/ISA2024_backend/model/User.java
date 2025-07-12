@@ -1,37 +1,68 @@
-package dto;
+package com.example.ISA2024_backend.model;
 
 import java.util.ArrayList;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import model.Post;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-public class UserDTO {
+public class User {
 
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	private Long id;
+	
+	@Column(name = "username", unique = true, nullable = false)
 	private String username;
+	
+	@Column(name = "password", nullable = false)
 	private String password;
+	
+	@Column(name = "email", unique = true, nullable = false)
 	private String email;
+	
+	@Column(name = "name", nullable = false)
 	private String name;
+	
+	@Column(name = "surname", nullable = false)
 	private String surname;
+
+	@Column(name = "address", nullable = false)
 	private String address;
+	
+	@Column(name = "city", nullable = false)
 	private String city;
+	
+	@Column(name = "country", nullable = false)
 	private String country;
+	
+	@Column(name = "verification", nullable = false)
+	private String verification;
+	
+	private boolean authorized;
+	
+	//@OneToMany(fetch = FetchType.EAGER)
 	private ArrayList<String> followers;
+	
+	//@ManyToOne(fetch = FetchType.EAGER)
 	private ArrayList<String> followed;
-	private ArrayList<Post> posts;
+	
+	//@OneToMany(targetEntity = Post.class, fetch = FetchType.EAGER)
+	//private ArrayList<Post> posts;
 
 	
 	
-	public UserDTO() {
+	public User() {
 		super();
 	}
 
-	public UserDTO(String username, String password, String email, String name, String surname, String address,
-			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed,
-			ArrayList<Post> posts) {
+	public User(String username, String password, String email, String name, String surname, String address,
+			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -41,9 +72,19 @@ public class UserDTO {
 		this.address = address;
 		this.city = city;
 		this.country = country;
+		this.verification = verification;
 		this.followers = followers;
 		this.followed = followed;
-		this.posts = posts;
+		//this.posts = posts;
+		this.authorized = false;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -110,6 +151,14 @@ public class UserDTO {
 		this.country = country;
 	}
 
+	public String getVerification() {
+		return verification;
+	}
+
+	public void setVerification(String verification) {
+		this.verification = verification;
+	}
+
 	public ArrayList<String> getFollowers() {
 		return followers;
 	}
@@ -126,13 +175,24 @@ public class UserDTO {
 		this.followed = followed;
 	}
 
-	public ArrayList<Post> getPosts() {
+	/*public ArrayList<Post> getPosts() {
 		return posts;
 	}
 
 	public void setPosts(ArrayList<Post> posts) {
 		this.posts = posts;
+	}*/
+
+	public boolean isAuthorized() {
+		return authorized;
 	}
+
+	public void setAuthorized(boolean authorized) {
+		this.authorized = authorized;
+	}
+	
+	
+	
 	
 	
 }

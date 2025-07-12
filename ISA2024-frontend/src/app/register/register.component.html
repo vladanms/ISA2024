@@ -2,45 +2,63 @@
 	<header>Registration</header>
 	<p></p>
 
-	<form>
-		<mat-label>Username: </mat-label>
-		<input name="name"[(ngModel)]="username">
-		<p></p>
-		
-		<mat-label>Password: </mat-label>
-		<input name="password" type = "password" [(ngModel)]="password">
-		<p></p>
-		
-		<mat-label>Repeat password: </mat-label>
-		<input name="repeat_password" type = "password" [(ngModel)]="repeat_password">
-		<p></p>
-		
-		<mat-label>E-mail: </mat-label>
-		<input name="email"[(ngModel)]="email">
-		<p></p>
-		
-		<mat-label>Name: </mat-label>
-		<input  name="name"[(ngModel)]="name">
-		<p></p>
-		
-		<mat-label>Surname: </mat-label>
-		<input  name="surname"[(ngModel)]="surname">
-		<p></p>
-		
-		<mat-label>Address: </mat-label>
-		<input  name="address"[(ngModel)]="address">
-		<p></p>
-		
-		<mat-label>City: </mat-label>
-		<input  name="city"[(ngModel)]="city">
-		<p></p>
-		
-		<mat-label>Country: </mat-label>
-		<input  name="country"[(ngModel)]="country">
-		<p></p>
+	<div class="register-form">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="username">Username</label>
+      <input id="username" formControlName="username" type="text" />
+      <div *ngIf="formControls['username'].invalid && formControls['username'].touched">Username is required.</div>
+    </div>
 
-		<button mat-flat-button (click) = "submit()">Submit</button>
-	</form>
-	<p></p>
-	<button mat-flat-button (click)="back()">Back</button>
+    <div>
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" type="text" />
+      <div *ngIf="formControls['name'].invalid && formControls['name'].touched">Name is required.</div>
+    </div>
+
+    <div>
+      <label for="surname">Surname</label>
+      <input id="surname" formControlName="surname" type="text" />
+      <div *ngIf="formControls['surname'].invalid && formControls['surname'].touched">Surname is required.</div>
+    </div>
+
+    <div>
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="email" />
+      <div *ngIf="formControls['email'].invalid && formControls['email'].touched">
+        Email is required and must be valid.
+      </div>
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input id="password" formControlName="password" type="password" />
+      <div *ngIf="formControls['password'].invalid && formControls['password']touched">Password is required (min 6 characters).</div>
+    </div>
+
+    <div>
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" formControlName="confirmPassword" type="password" />
+      <div *ngIf="formControls['confirmPassword'].invalid && formControls['confirmPassword']touched">Confirm Password is required.</div>
+    </div>
+
+    <div>
+      <label for="city">City</label>
+      <input id="city" formControlName="city" type="text" />
+      <div *ngIf="formControls['city'].invalid && formControls['city'].touched">City is required.</div>
+    </div>
+
+    <div>
+      <label for="country">Country</label>
+      <input id="country" formControlName="country" type="text" />
+      <div *ngIf="formControls['country'].invalid && formControls['country'].touched">Country is required.</div>
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid"></button>
+
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </form>
+  
+  <button (click)="back()">Back</button>
+</div>
 </html>

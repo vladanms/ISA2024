@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { UserDTO } from '../dto/userDTO';
 
 
 @Injectable({
@@ -13,20 +14,19 @@ export class RegisterService {
 	
 	  constructor(private http: HttpClient) { }
 	  
-	  register(username: string, password: string, email: string, name: string, surname: string,
-	   address: string, city: string, country: string): Observable<any> {
-		let userDTO = {
-		username: username,
-		password : password,
-		email : email,
-		name : name,
-		surname : surname,
-		address : address,
-		city : city,
-		country : country
+	  register(userDTO: UserDTO): Observable<any> {
+		let user = {
+		username: userDTO.username,
+		password : userDTO.password,
+		email : userDTO.email,
+		name : userDTO.name,
+		surname : userDTO.surname,
+		address : userDTO.address,
+		city : userDTO.city,
+		country : userDTO.country
 		};
 		
-		return this.http.post<any>(this.apiHost + 'user/userRegister', userDTO, {headers: this.headers});
+		return this.http.post<any>(this.apiHost + 'user/register', user, {headers: this.headers});
 	
 	}
 }

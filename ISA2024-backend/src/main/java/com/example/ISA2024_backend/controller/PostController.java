@@ -1,7 +1,9 @@
-package controller;
+package com.example.ISA2024_backend.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -15,12 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dto.CreatePostDTO;
-import dto.PostDTO;
-import jakarta.mail.MessagingException;
-import model.Post;
-import service.PostService;
-import service.UserService;
+import com.example.ISA2024_backend.dto.CreatePostDTO;
+import com.example.ISA2024_backend.model.Post;
+import com.example.ISA2024_backend.service.PostService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")

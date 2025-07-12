@@ -24,7 +24,6 @@ import { PostComponent } from './post/post.component';
 import { GuestPageComponent } from './guest-page/guest-page.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { MyPostsComponent } from './my-posts/my-posts.component';
-import { PostDTOComponent } from './dto/post-dto/post-dto.component';
 
 @NgModule({
   declarations: [
@@ -35,8 +34,7 @@ import { PostDTOComponent } from './dto/post-dto/post-dto.component';
     PostComponent,
     GuestPageComponent,
     CreatePostComponent,
-    MyPostsComponent,
-    PostDTOComponent
+    MyPostsComponent
   ],
   imports: [
     BrowserModule,

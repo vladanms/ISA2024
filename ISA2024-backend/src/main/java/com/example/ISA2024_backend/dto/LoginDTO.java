@@ -1,4 +1,4 @@
-package dto;
+package com.example.ISA2024_backend.dto;
 
 public class LoginDTO {
 

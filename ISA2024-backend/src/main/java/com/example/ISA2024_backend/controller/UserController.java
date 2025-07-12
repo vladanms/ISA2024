@@ -1,10 +1,10 @@
-package controller;
+package com.example.ISA2024_backend.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import jakarta.mail.MessagingException;
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dto.LoginDTO;
-import dto.PostDTO;
-import dto.RegisterDTO;
-import dto.UserDTO;
-import service.UserService;
-import model.Post;
-import model.User;
+import com.example.ISA2024_backend.dto.LoginDTO;
+import com.example.ISA2024_backend.dto.RegisterDTO;
+import com.example.ISA2024_backend.model.User;
+import com.example.ISA2024_backend.service.UserService;
+
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")

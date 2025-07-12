@@ -1,4 +1,4 @@
-package service;
+package com.example.ISA2024_backend.service;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import model.Post;
-import repository.PostRepository;
-import repository.UserRepository;
+import com.example.ISA2024_backend.model.Post;
+import com.example.ISA2024_backend.repository.PostRepository;
+import com.example.ISA2024_backend.repository.UserRepository;
 
 @Service
 public class PostService {

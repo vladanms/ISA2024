@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { RegisterService } from '../service/register.service';
 import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserDTO } from '../dto/userDTO';
 
 @Component({
   selector: 'app-register',
@@ -12,45 +14,52 @@ import { ToastrService } from 'ngx-toastr';
 
 export class RegisterComponent {
 	
-		username: string = "";
-		password : string = "";
-		repeat_password: string = "";
-		email : string = "";
-		name : string = "";
-		surname : string = "";
-		address : string = "";
-		city : string = "";
-		country : string = "";
+ registerForm: FormGroup;
+  errorMessage: string = '';
 
-constructor(private registerService: RegisterService, private router: Router, private toastr: ToastrService) { }
- 
-   submit()
-   {
-	   if(this.username == "" || this.password == "" || this.email == "" || this.name == "" || this.surname == "" || 
-	    this.address == "" || this.city == "" || this.country == "")
-	   {
-		   this.toastr.error("Please fill out the full form", "Error");
-	   }
-	   if(this.password != this.repeat_password)
-	   {
-		   this.toastr.error("Passwords don't match", "Error");
-	   }
-	   
-		this.registerService.register(this.username,this.password,this.email,this.name,this.surname
-		,this.address,this.city,this.country).subscribe(
-      {
-        next: (res) => 
-        {
-          this.toastr.success("Succesfully registered", "success");
-          this.router.navigate(['/login']);
-        },
-        error: (e) => 
-        {
-	     this.toastr.error("Error registering; make sure all required fields are unique", "error");
-       }
-    	});
-	   }
+  constructor(
+    private fb: FormBuilder,
+    private registerService: RegisterService,
+    private router: Router
+  ) {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      surname: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      country: ['', [Validators.required]],
+    });
+  }
 
+  get formControls() {
+    return this.registerForm.controls;
+  }
+
+  onSubmit() {
+    if (this.registerForm.invalid) {
+      return;
+    }
+
+    const user: UserDTO = this.registerForm.value;
+
+    if (user.password !== user.confirmPassword) {
+      this.errorMessage = 'Passwords do not match';
+      return;
+    }
+
+    this.registerService.register(user).subscribe(
+      (response) => {
+        alert('Registration successful!');
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        this.errorMessage = error.error || 'Registration failed';
+      }
+    );
+  }
 	back()
 	{
 		this.router.navigate(['/login']);

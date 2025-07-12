@@ -1,10 +1,9 @@
-package dto;
+package com.example.ISA2024_backend.dto;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import model.Comment;
 
 public class CreatePostDTO {
 

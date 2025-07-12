@@ -1,4 +1,4 @@
-package model;
+package com.example.ISA2024_backend.model;
 
 public class Comment {
 

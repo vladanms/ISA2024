@@ -1,12 +1,11 @@
-package repository;
+package com.example.ISA2024_backend.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import model.Post;
-import model.User;
+import com.example.ISA2024_backend.model.Post;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>{
