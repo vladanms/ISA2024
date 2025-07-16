@@ -2,8 +2,10 @@ package com.example.ISA2024_backend.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-
+import java.util.HashSet;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +37,23 @@ public class UserController {
 	private User currentUser;
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
-		if(userService.login(loginDTO).equals("username")) {
-			currentUser = userService.getByUsername(loginDTO.getCredentials());
-			return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO){
+		
+		 Map<String, String> response = new HashMap<>();
+		    try {
+		if(userService.login(loginDTO) != null)
+		{
+			currentUser = userService.login(loginDTO);
+			response.put("credentials", currentUser.getUsername());
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		if(userService.login(loginDTO) == "email") {
-			currentUser = userService.getByEmail(loginDTO.getCredentials());
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		return new ResponseEntity<>("Invalid username or password",HttpStatus.BAD_REQUEST);
+		 response.put("error", "Invalid username or password");
+		    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        response.put("error", "An error occurred while processing the login request.");
+		        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
 	}
 	
 	@PostMapping("/register")
@@ -64,6 +73,7 @@ public class UserController {
 		user.setFollowed(null);
 		user.setFollowers(null);
 		user.setVerification(userService.generateVerification());
+		user.setAuthorized(true);
 		
 		if(userService.register(user) == "usernameError")
 		{

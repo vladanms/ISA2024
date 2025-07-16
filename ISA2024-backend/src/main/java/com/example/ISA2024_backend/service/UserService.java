@@ -18,6 +18,7 @@ import com.example.ISA2024_backend.repository.UserRepository;
 @Service
 public class UserService {
 
+	@Autowired
 	private UserRepository users;
 //	private JavaMailSender sender;
  //   private final PasswordEncoder passwordEncoder;
@@ -41,36 +42,28 @@ public class UserService {
 		return "success";
 	}
 	
-	public String login(LoginDTO loginDTO)	
+	public User login(LoginDTO loginDTO)	
 	{
 		User toLogin = users.findByUsername(loginDTO.getCredentials());
-		/*if(toLogin.isAuthorized() == false)
-		{
-			return null;
-		}*/
 		if(toLogin != null)
 		{
-			if(toLogin.getPassword() == loginDTO.getPassword())
+			if(toLogin.getPassword().equals(toLogin.getPassword()))
 			{
-				return "username";
+				return users.findByUsername(loginDTO.getCredentials());
 			}
 		}
 		toLogin = users.findByEmail(loginDTO.getCredentials());
-		/*if(toLogin.isAuthorized() == false)
-		{
-			return null;
-		}*/
 		if(toLogin != null)
 		{
-			if(toLogin.getPassword() == loginDTO.getPassword())
+			if(toLogin.getPassword().equals(toLogin.getPassword()))
 			{
-				return "email";
+				return users.findByEmail(loginDTO.getCredentials());
 			}
 		}
 		return null;
 	}
 	
-	public User getByUsername(String username) 
+	/*public User getByUsername(String username) 
 	{
 		return users.findByUsername(username);
 	}
@@ -78,7 +71,7 @@ public class UserService {
 	public User getByEmail(String email) 
 	{
 		return users.findByEmail(email);
-	}
+	}*/
 	
 /*	public ArrayList<Post> getPosts(String username)
 	{

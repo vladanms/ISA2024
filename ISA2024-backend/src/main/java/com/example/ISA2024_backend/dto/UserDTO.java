@@ -3,11 +3,6 @@ package com.example.ISA2024_backend.dto;
 
 import java.util.ArrayList;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import com.example.ISA2024_backend.model.Post;
 
 public class UserDTO {

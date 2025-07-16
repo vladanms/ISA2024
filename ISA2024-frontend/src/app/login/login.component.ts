@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class LoginComponent implements OnInit {
 
-  username: string = "";
+  credentials: string = "";
   password: string = "";
   
     ngOnInit(): void {		
@@ -23,16 +23,16 @@ export class LoginComponent implements OnInit {
   
   	loginf()
   	{
-	  	 this.loginService.login(this.username, this.password).subscribe(
+	  	 this.loginService.login(this.credentials, this.password).subscribe(
       (response) => {
-		  console.log("logged");
+		  console.log(response);
         this.router.navigate(['/homepage']);
       },
       (error) => {
-		  console.log("fail");
+		  console.log(`${error.message}`);
         alert('Login failed! Please check your credentials.');
       }
-    );;
+    );
      }
 	
 	guestLogin()

@@ -1,15 +1,21 @@
 package com.example.ISA2024_backend.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "users")
 public class User {
 
 	@Id
@@ -44,13 +50,18 @@ public class User {
 	@Column(name = "verification", nullable = false)
 	private String verification;
 	
+	@Column(name = "authorized")
 	private boolean authorized;
 	
-	//@OneToMany(fetch = FetchType.EAGER)
-	private ArrayList<String> followers;
+	@ElementCollection
+	@CollectionTable(name = "followers", joinColumns = @javax.persistence.JoinColumn(name = "user_id"))
+	@Column(name = "followers")
+	private List<String> followers;
 	
-	//@ManyToOne(fetch = FetchType.EAGER)
-	private ArrayList<String> followed;
+	@ElementCollection
+	@CollectionTable(name = "followed", joinColumns = @javax.persistence.JoinColumn(name = "user_id"))
+	@Column(name = "followed")
+	private List<String> followed;
 	
 	//@OneToMany(targetEntity = Post.class, fetch = FetchType.EAGER)
 	//private ArrayList<Post> posts;
@@ -62,7 +73,7 @@ public class User {
 	}
 
 	public User(String username, String password, String email, String name, String surname, String address,
-			String city, String country, String verification, ArrayList<String> followers, ArrayList<String> followed) {
+			String city, String country, String verification, List<String> followers, List<String> followed) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -159,19 +170,19 @@ public class User {
 		this.verification = verification;
 	}
 
-	public ArrayList<String> getFollowers() {
+	public List<String> getFollowers() {
 		return followers;
 	}
 
-	public void setFollowers(ArrayList<String> followers) {
+	public void setFollowers(List<String> followers) {
 		this.followers = followers;
 	}
 
-	public ArrayList<String> getFollowed() {
+	public List<String> getFollowed() {
 		return followed;
 	}
 
-	public void setFollowed(ArrayList<String> followed) {
+	public void setFollowed(List<String> followed) {
 		this.followed = followed;
 	}
 
@@ -183,7 +194,7 @@ public class User {
 		this.posts = posts;
 	}*/
 
-	public boolean isAuthorized() {
+	public boolean getAuthorized() {
 		return authorized;
 	}
 

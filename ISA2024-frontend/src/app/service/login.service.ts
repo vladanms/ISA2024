@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
 	apiHost: string = 'http://localhost:8091/';
-  	headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  	headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
   
 
    constructor(private http: HttpClient) { }
@@ -15,13 +15,20 @@ export class LoginService {
 
 
  	login(credentials: string, password: string): Observable<any>{
+		 console.log("started");
 	  let loginDTO =
 	  {
 		  credentials: credentials,
 		  password: password
 	  }
 	  
-	      return this.http.post<any>(this.apiHost + 'user/userLogin', loginDTO, {headers: this.headers});
+	  
+	   return this.http.post<any>(`${this.apiHost}user/login`, loginDTO, { headers: this.headers })
+      .pipe(
+        // Optional: Handle any responses or errors here if needed
+        // map(response => response),
+        // catchError(error => throwError(error))
+      );
 	  }
 	  
 	

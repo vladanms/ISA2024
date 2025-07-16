@@ -1,5 +1,8 @@
 package com.example.ISA2024_backend.model;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Comment {
 
 	private String users;

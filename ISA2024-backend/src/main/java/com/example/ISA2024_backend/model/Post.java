@@ -1,9 +1,12 @@
 package com.example.ISA2024_backend.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +16,7 @@ import javax.persistence.OneToMany;
 
 import com.example.ISA2024_backend.model.Comment;
 
-
-
+@Entity
 public class Post{
 	
 	@Id
@@ -25,11 +27,13 @@ public class Post{
 	@Column(name = "owner", unique = false, nullable = false)
 	private String owner;
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	private ArrayList<String> likes;
+    @ElementCollection
+    @CollectionTable(name = "likes", joinColumns = @javax.persistence.JoinColumn(name = "id"))
+    @Column(name = "likes")
+	private List<String> likes;
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	private ArrayList<Comment> comments;
+	@ElementCollection(fetch = FetchType.LAZY)
+	private List<Comment> comments;
 	
 	@Column(name = "imagePath", unique = false, nullable = false)
 	private String imagePath;
@@ -93,19 +97,19 @@ public class Post{
 		this.owner = owner;
 	}
 
-	public ArrayList<String> getLikes() {
+	public List<String> getLikes() {
 		return likes;
 	}
 
-	public void setLikes(ArrayList<String> likes) {
+	public void setLikes(List<String> likes) {
 		this.likes = likes;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
