@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -24,8 +25,9 @@ public class Post{
 	@Column(name = "id", unique = true, nullable = false)
 	private Long id;
 	
-	@Column(name = "owner", unique = false, nullable = false)
-	private String owner;
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User owner;
 	
     @ElementCollection
     @CollectionTable(name = "likes", joinColumns = @javax.persistence.JoinColumn(name = "id"))
@@ -55,7 +57,7 @@ public class Post{
 		super();
 	}
 
-	public Post(String owner, String imagePath, String content, Float location_x, Float location_y) {
+	public Post(User owner, String imagePath, String content, Float location_x, Float location_y) {
 		super();
 		this.owner = owner;
 		this.imagePath = imagePath;
@@ -89,11 +91,11 @@ public class Post{
 		this.id = id;
 	}
 
-	public String getOwner() {
+	public User getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 

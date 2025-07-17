@@ -42,6 +42,12 @@
       <div *ngIf="formControls['confirmPassword'].invalid && formControls['confirmPassword']touched">Confirm Password is required.</div>
     </div>
 
+	<div>
+      <label for="address">Address</label>
+      <input id="address" formControlName="address" type="text" />
+      <div *ngIf="formControls['address'].invalid && formControls['address'].touched">Address is required.</div>
+    </div>
+
     <div>
       <label for="city">City</label>
       <input id="city" formControlName="city" type="text" />
@@ -54,7 +60,7 @@
       <div *ngIf="formControls['country'].invalid && formControls['country'].touched">Country is required.</div>
     </div>
 
-    <button type="submit" [disabled]="registerForm.invalid"></button>
+    <button type="submit" [disabled]="registerForm.invalid">Register</button>
 
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
   </form>

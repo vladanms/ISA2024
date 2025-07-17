@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserDTO } from '../dto/userDTO';
+import { tap } from 'rxjs/operators'; 
 
 
 @Injectable({
@@ -26,7 +27,15 @@ export class RegisterService {
 		country : userDTO.country
 		};
 		
-		return this.http.post<any>(this.apiHost + 'user/register', user, {headers: this.headers});
+		return this.http.post<any>(`${this.apiHost}user/register`, user, {headers: this.headers}).pipe(
+		  tap(response => {
+          if (response && response.registered) {
+            console.log("Succesfully regisetred:", response.registered);
+          } else if (response && response.error) {
+            console.log("Error during registration:", response.error);
+          }
+        })
+      );
 	
 	}
 }

@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.HashSet;
+import java.util.List;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ISA2024_backend.dto.LoginDTO;
 import com.example.ISA2024_backend.dto.RegisterDTO;
+import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.service.UserService;
 
@@ -56,9 +59,38 @@ public class UserController {
 		    }
 	}
 	
+	@PostMapping("/logout")
+	public ResponseEntity<Map<String, String>> logout(@RequestBody String username){
+		
+		 Map<String, String> response = new HashMap<>();
+		    try {
+		        if (currentUser == null) {
+		            response.put("error", "No user is logged in.");
+		            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		        }
+		    	if(currentUser.getUsername().equals(username))
+		    	{
+		    	response.put("username", username);
+		    	currentUser = null;
+			    return new ResponseEntity<>(response, HttpStatus.OK);
+		    	}
+		    	response.put("error", "Username mismatch error.");
+		        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        response.put("error", "An error occurred while processing the logout request.");
+		        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
+	}
+	
 	@PostMapping("/register")
-	public ResponseEntity<String> register(@RequestBody RegisterDTO userDTO) throws MessagingException, UnsupportedEncodingException
+	public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDTO userDTO) throws MessagingException, UnsupportedEncodingException
 	{
+		
+	    List<String> followers = new ArrayList<>();
+	    List<String> followed = new ArrayList<>();
+	    List<Post> posts = new ArrayList<>(); 
+	    
 		User user = new User();
 		
 		user.setUsername(userDTO.getUsername());
@@ -69,22 +101,43 @@ public class UserController {
 		user.setAddress(userDTO.getAddress());
 		user.setCity(userDTO.getCity());
 		user.setCountry(userDTO.getCountry());
-		//user.setPosts(null);
-		user.setFollowed(null);
-		user.setFollowers(null);
+		user.setPosts(posts);
+		user.setFollowed(followed);
+		user.setFollowers(followers);
 		user.setVerification(userService.generateVerification());
 		user.setAuthorized(true);
 		
-		if(userService.register(user) == "usernameError")
+		Map<String, String> response = new HashMap<>();
+		
+		try {
+			String register = userService.register(user);
+		if(register.equals("usernameError"))
 		{
-			return new ResponseEntity<>("Username already taken.",HttpStatus.BAD_REQUEST);
+			response.put("error", "Username taken. Please select another one.");
+			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 		}
-		if(userService.register(user) == "emailError")
+		if(register.equals("emailError"))
 		{
-			return new ResponseEntity<>("Email already taken.",HttpStatus.BAD_REQUEST);
+			response.put("error", "This e-mail is already registered.");
+			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 		}
-
-		return new ResponseEntity<>("Succesfully registered", HttpStatus.OK);
+		//userService.verificationEmail(user);
+		response.put("registered", userDTO.getUsername());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		 } catch (Exception e) {
+		        e.printStackTrace();
+		        response.put("error", "An error occurred while processing the registration request.");
+		        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
+	}
+	
+	@GetMapping("/verify")
+	public boolean verifyUser(@Param("username") String username, @Param("code") String code) {
+	    if (userService.verification(username, code)) {
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
 	
 /*	@PutMapping("/createPost")

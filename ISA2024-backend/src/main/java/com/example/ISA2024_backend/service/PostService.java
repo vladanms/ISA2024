@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ISA2024_backend.model.Post;
+import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.repository.PostRepository;
 import com.example.ISA2024_backend.repository.UserRepository;
 
@@ -22,7 +23,7 @@ public class PostService {
 
 	private PostRepository posts;
 	
-	public void CreatePost(String owner, String image, String content, Float location_x, Float location_y)
+	public void CreatePost(User owner, String image, String content, Float location_x, Float location_y)
 	{
 		Post newPost = new Post(owner, image, content, location_x, location_y);
 		posts.save(newPost);

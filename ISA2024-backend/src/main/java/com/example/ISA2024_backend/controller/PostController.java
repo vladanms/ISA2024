@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ISA2024_backend.dto.CreatePostDTO;
 import com.example.ISA2024_backend.model.Post;
+import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.service.PostService;
+import com.example.ISA2024_backend.service.UserService;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -30,13 +33,16 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 	
+	@Autowired
+	private UserService userService;
+	
 	private String localDirectory = "/images";
 	
 	@PostMapping("/createPost")
 	public ResponseEntity<String> createPost(@RequestBody CreatePostDTO postDTO) throws MessagingException, IOException
 	{
-		
-		postService.CreatePost(postDTO.getOwner(), postService.saveImageToLocalStorage(localDirectory, postDTO.getImage()), postDTO.getContent(), postDTO.getLocation_x(),
+		User owner = userService.getByUsername(postDTO.getOwner());
+		postService.CreatePost(owner, postService.saveImageToLocalStorage(localDirectory, postDTO.getImage()), postDTO.getContent(), postDTO.getLocation_x(),
 				postDTO.getLocation_y());
 		return new ResponseEntity<>("Posted!", HttpStatus.OK);
 	}

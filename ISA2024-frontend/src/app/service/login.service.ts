@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators'; 
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +26,15 @@ export class LoginService {
 	  
 	   return this.http.post<any>(`${this.apiHost}user/login`, loginDTO, { headers: this.headers })
       .pipe(
-        // Optional: Handle any responses or errors here if needed
-        // map(response => response),
-        // catchError(error => throwError(error))
+		  tap(response => {
+          if (response && response.credentials) {
+            localStorage.setItem('loggedUser', response.credentials);
+            console.log("Username stored in localStorage:", response.credentials);
+          } else if (response && response.error) {
+            console.log("Error during login:", response.error);
+          }
+        })
       );
-	  }
-	  
-	
+  }
+  
 }

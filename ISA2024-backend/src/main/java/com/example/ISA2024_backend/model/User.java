@@ -63,8 +63,8 @@ public class User {
 	@Column(name = "followed")
 	private List<String> followed;
 	
-	//@OneToMany(targetEntity = Post.class, fetch = FetchType.EAGER)
-	//private ArrayList<Post> posts;
+	@OneToMany(targetEntity = Post.class, mappedBy = "owner", fetch = FetchType.EAGER)
+	private List<Post> posts;
 
 	
 	
@@ -73,7 +73,7 @@ public class User {
 	}
 
 	public User(String username, String password, String email, String name, String surname, String address,
-			String city, String country, String verification, List<String> followers, List<String> followed) {
+			String city, String country, String verification, List<Post> posts, List<String> followers, List<String> followed) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -86,7 +86,7 @@ public class User {
 		this.verification = verification;
 		this.followers = followers;
 		this.followed = followed;
-		//this.posts = posts;
+		this.posts = posts;
 		this.authorized = false;
 	}
 
@@ -186,13 +186,13 @@ public class User {
 		this.followed = followed;
 	}
 
-	/*public ArrayList<Post> getPosts() {
+	public List<Post> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(ArrayList<Post> posts) {
+	public void setPosts(List<Post> posts) {
 		this.posts = posts;
-	}*/
+	}
 
 	public boolean getAuthorized() {
 		return authorized;

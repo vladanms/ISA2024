@@ -1,6 +1,6 @@
 create table users
 (
-	id bigint primary key,
+	id BIGSERIAL primary key,
 	username text,
 	password text,
 	email text,
@@ -10,15 +10,35 @@ create table users
 	city text,
 	country text,
 	verification text,
+	authorized boolean,
 	followers text[], 
 	followed text[]		
-)
+);
 
-INSERT INTO public.users (id, username, password, email, name, 
+create type comment as(
+	users text,
+	content text
+);
+
+create table posts
+(
+	id BIGSERIAL primary key,
+	user_id BIGINT not null,
+	owner text,
+	likes text[],
+	comments comment[],
+	imagePath text,
+	time timestamp,
+	content text,
+	location_x real,
+	location_y real,
+	foreign key (user_id) references users(id) on delete cascade
+);
+
+INSERT INTO public.users (username, password, email, name, 
 						  surname, address,
-						  city, country, verification, followers, followed)
-						  VALUES(default,
-								 'user1', 
+						  city, country, verification, authorized, followers, followed)
+						  VALUES('user1', 
 								 '1234', 
 								 'user123454321@gmail.com',
 								 'ivan', 
@@ -27,14 +47,14 @@ INSERT INTO public.users (id, username, password, email, name,
 								 'novi sad', 
 								 'srbija',
 								 'asdfcgasiu1Mpd72vdp7',
-								null,
-								null);
+								 true,
+								'{}',
+								'{}');
 								
-INSERT INTO public.users (id, username, password, email, name, 
+INSERT INTO public.users (username, password, email, name, 
 						  surname, address,
-						  city, country, verification, followers, followed)
-						  VALUES(default,
-								 'perica', 
+						  city, country, verification, authorized, followers, followed)
+						  VALUES('perica', 
 								 '0000', 
 								 'perica12342@gmail.com',
 								 'pera', 
@@ -43,14 +63,14 @@ INSERT INTO public.users (id, username, password, email, name,
 								 'novi sad', 
 								 'srbija',
 								 '896dhoa67nsy65olsjht',
-								null,
-								null);
+								 true,
+								'{}',
+								'{}');
 								
-INSERT INTO public.users (id, username, password, email, name, 
+INSERT INTO public.users (username, password, email, name, 
 						  surname, address,
-						  city, country, verification, followers, followed)
-						  VALUES(default,
-								 'malialek', 
+						  city, country, verification, authorized, followers, followed)
+						  VALUES('malialek', 
 								 'abcdefgh', 
 								 'aca759426@gmail.com',
 								 'aca', 
@@ -59,33 +79,16 @@ INSERT INTO public.users (id, username, password, email, name,
 								 'novi sad', 
 								 'srbija',
 								 'mjhgrdcs82ps28hnaja',
-								null,
-								null);
+								 true,
+								'{}',
+								'{}');
 								
 								
-create type comment as(
-	users text,
-	content text
-);
-
-create table posts
-(
-	id bigint primary key,
-	owner text,
-	likes text[],
-	comments comment[],
-	imagePath text,
-	time timestamp,
-	content text,
-	location_x real,
-	location_y real	
-)
 
 
-INSERT INTO public.posts(id, owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(owner, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
-					default,
-					'perica',
+					(SELECT id FROM public.users WHERE username = 'perica'),
 					null,
 					null,
 					'images/7ytre13avg65SHjk09jymmgr',
@@ -95,10 +98,9 @@ INSERT INTO public.posts(id, owner, likes, comments, imagePath, time, content, l
 					20					
 					);
 					
-INSERT INTO public.posts(id, owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(owner, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
-					default,
-					'malialek',
+					(SELECT id FROM public.users WHERE username = 'malialek')
 					null,
 					null,
 					'images/qweyhdbnflou64fabjd7lm62',
@@ -108,10 +110,9 @@ INSERT INTO public.posts(id, owner, likes, comments, imagePath, time, content, l
 					10					
 					);
 					
-INSERT INTO public.posts(id, owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(owner, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
-					default,
-					'perica',
+					(SELECT id FROM public.users WHERE username = 'perica')
 					null,
 					null,
 					'images/9tdgb36yhfdki541dsfrgcvt',
