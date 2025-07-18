@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
+import com.example.ISA2024_backend.model.Comment;
 import com.example.ISA2024_backend.repository.PostRepository;
 import com.example.ISA2024_backend.repository.UserRepository;
 
@@ -32,6 +33,11 @@ public class PostService {
 	public void DeletePost(Post post)
 	{
 		posts.delete(post);
+	}
+	
+	public void Comment(Post post)
+	{
+		//this function does nothing, it's to be called only for testing purposes.
 	}
 	
 	public ArrayList<Post> getPostsByUser(String owner)

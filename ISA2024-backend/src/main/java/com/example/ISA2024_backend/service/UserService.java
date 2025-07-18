@@ -15,6 +15,10 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +30,7 @@ import com.example.ISA2024_backend.repository.UserRepository;
 import main.model.UserRegistered;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository users;
@@ -54,7 +58,31 @@ public class UserService {
 		return "success";
 	}
 	
-	public User login(LoginDTO loginDTO)	
+	 @Override
+	    public UserDetails loadUserByUsername(String credentials) throws UsernameNotFoundException {
+	        User user = users.findByUsername(credentials);
+	        
+	        if (user == null) {
+	            user = users.findByEmail(credentials);
+	            if (user == null) {
+	                throw new UsernameNotFoundException("User not found!");
+	            }
+	        }
+	        
+	        UserBuilder builder = org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
+	            .password(user.getPassword());
+
+	        
+	        if (user.getAuthorized()) {
+	            builder.roles("USER_AUTHORIZED");
+	        } else {
+	            builder.roles();
+	        }
+
+	        return builder.build();
+	    }
+	
+	/*public User login(LoginDTO loginDTO)	
 	{
 		User toLogin = users.findByUsername(loginDTO.getCredentials());
 		if(toLogin != null)
@@ -73,7 +101,7 @@ public class UserService {
 			}
 		}
 		return null;
-	}
+	}*/
 	
 	public User getByUsername(String username) 
 	{

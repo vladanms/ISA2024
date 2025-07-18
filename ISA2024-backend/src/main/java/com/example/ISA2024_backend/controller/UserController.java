@@ -14,6 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +39,17 @@ import com.example.ISA2024_backend.service.UserService;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "user")
-public class UserController {
+public class UserController{
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
 	private User currentUser;
 	
 	@PostMapping("/login")
@@ -51,15 +63,18 @@ public class UserController {
 		            response.put("error", ("You're doing that too often. Please try again in " + limiter));
 		            return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
 		        }
-		if(userService.login(loginDTO) != null)
-		{
-			currentUser = userService.login(loginDTO);
-			response.put("credentials", currentUser.getUsername());
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		}
+		  Authentication auth = authenticationManager.authenticate(
+		            new UsernamePasswordAuthenticationToken(loginDTO.getCredentials(), loginDTO.getPassword())
+		        );
+
+		        response.put("credentials", loginDTO.getCredentials());
+		        return new ResponseEntity<>(response, HttpStatus.OK);
+		 } 
+		 catch (AuthenticationException e) {
 		 response.put("error", "Invalid username or password.");
 		    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-		    } catch (Exception e) {
+		    } 
+		 catch (Exception e) {
 		        e.printStackTrace();
 		        response.put("error", "An error occurred while processing the login request.");
 		        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -101,7 +116,7 @@ public class UserController {
 		User user = new User();
 		
 		user.setUsername(userDTO.getUsername());
-		user.setPassword(userDTO.getPassword());
+		user.setPassword(passwordEncoder.encode(userDTO.getPassword())); 
 		user.setEmail(userDTO.getEmail());
 		user.setName(userDTO.getName());
 		user.setSurname(userDTO.getSurname());

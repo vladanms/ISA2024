@@ -1,17 +1,24 @@
 package com.example.ISA2024_backend.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.example.ISA2024_backend.service.UserService;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
+import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("deprecation")
 @Configuration
@@ -19,69 +26,57 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig{
 	
- /*   @SuppressWarnings("removal")
-	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/login", "/register").permitAll()
-                .anyRequest().authenticated())
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .loginProcessingUrl("users/login")
-                        .defaultSuccessUrl("/secured-endpoint", true)
-                        .permitAll());
-
-        return http.build();
-    }*/
-
+	@Autowired
+	private UserService userService;
+	
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); 
+	  public WebMvcConfigurer corsConfigurer() {
+	        return new WebMvcConfigurer() {
+	            @Override
+	            public void addCorsMappings(CorsRegistry registry) {
+	                registry.addMapping("/**")
+	                        .allowedOrigins("http://localhost:4200")
+	                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+	                        .allowCredentials(true);
+	            }
+	        };
+	    }
+    @Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+        		.cors(withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authz -> authz
+                                .antMatchers("/user/login", "/user/register").permitAll()
+                                .antMatchers("post/**").hasRole("USER_AUTHORIZED")
+                                .anyRequest().authenticated()
+                )
+                .formLogin(login -> login.disable())
+                .httpBasic(withDefaults())
+        		.logout(logout -> logout
+                .logoutUrl("/user/logout")                 
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                })
+                .invalidateHttpSession(true)     
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")      
+            );
+        			
+        return http.build();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Disable CSRF and allow all requests without authentication
-        http.csrf().disable()
-            .authorizeRequests()
-                .anyRequest().permitAll();  // Permit all requests without authentication
-        return http.build(); // Finalize the security configuration
-    } 
-    
-    
-//    protected void configure(HttpSecurity http) throws Exception {
-//
-//       http.csrf(csrf -> csrf.disable())
-//               .authorizeRequests(requests -> requests
-//                       .anyRequest().permitAll());
-//	   
-//        /* auth.inMemoryAuthentication()
-//             .passwordEncoder(passwordEncoder())
-//             .withUser(User.builder()
-//                     .username("user")
-//                     .password(passwordEncoder().encode("password"))  // Encode password
-//                     .roles("USER")
-//                     .build());*/
-//       
-//	 /*  http.csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(requests -> requests
-//                        .antMatchers("/login", "/register").permitAll()
-//                        .anyRequest().authenticated())
-//                .formLogin(login -> login
-//                        .loginPage("/login")
-//                        .permitAll());
-//                  */      
-//    } 
-    
-    //test
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-            User.withUsername("user")
-                .password(passwordEncoder().encode("password"))  // Encode password
-                .roles("USER")
-                .build()
-        );
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
-}
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                   .userDetailsService(userService)
+                   .passwordEncoder(passwordEncoder())
+                   .and()
+                   .build();
+    }
 };
