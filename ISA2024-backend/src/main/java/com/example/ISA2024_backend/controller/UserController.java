@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.HashSet;
 import java.util.List;
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -40,17 +41,23 @@ public class UserController {
 	private User currentUser;
 	
 	@PostMapping("/login")
-	public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO){
+	public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request){
 		
 		 Map<String, String> response = new HashMap<>();
-		    try {
+		 String ip = request.getRemoteAddr();
+		 String limiter = userService.loginLimiter(ip);
+		 try {
+		  if (!limiter.equals("ok")) {
+		            response.put("error", ("You're doing that too often. Please try again in " + limiter));
+		            return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
+		        }
 		if(userService.login(loginDTO) != null)
 		{
 			currentUser = userService.login(loginDTO);
 			response.put("credentials", currentUser.getUsername());
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		 response.put("error", "Invalid username or password");
+		 response.put("error", "Invalid username or password.");
 		    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		    } catch (Exception e) {
 		        e.printStackTrace();

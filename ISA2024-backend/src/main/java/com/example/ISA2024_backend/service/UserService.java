@@ -3,7 +3,11 @@ package com.example.ISA2024_backend.service;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -26,7 +30,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository users;
-	private JavaMailSender sender;
+	//private JavaMailSender sender;
+	private final Map<String, List<Long>> loginAttempts = new ConcurrentHashMap<>();
+	private final Map<String, List<Long>> globalActions = new ConcurrentHashMap<>();
  //   private final PasswordEncoder passwordEncoder;
 	
 /*    @Autowired
@@ -99,7 +105,7 @@ public class UserService {
 	  return sb.toString(); 
 	 }
 	
-	public void verificationEmail(User user) throws MessagingException, UnsupportedEncodingException 
+	/*public void verificationEmail(User user) throws MessagingException, UnsupportedEncodingException 
 	{
 	    String toAddress = user.getEmail();
 	    String fromAddress = "OnlyBuns verification";
@@ -122,7 +128,7 @@ public class UserService {
 	    helper.setText(content, true);
 	     
 	    sender.send(message);
-	}
+	}*/
 	
 	public boolean verification(String username, String verification)
 	{
@@ -140,6 +146,34 @@ public class UserService {
 		}
 		return false;
 	}
+	
+	 public synchronized String loginLimiter(String ip) {
+	        long currentTime = System.currentTimeMillis();
+	        List<Long> attempts = loginAttempts.getOrDefault(ip, new ArrayList<>());
+
+	        attempts.removeIf(attemptTime -> currentTime - attemptTime > TimeUnit.MINUTES.toMillis(5));
+	        if (attempts.size() >= 5) {
+	            return TimeUnit.MILLISECONDS.toMinutes(TimeUnit.MINUTES.toMillis(5) - (currentTime - attempts.get(0))) + " minutes and " +  
+	            		TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MINUTES.toMillis(5) - (currentTime - attempts.get(0))) % 60 + " seconds.";
+	        }
+	        attempts.add(currentTime);
+	        loginAttempts.put(ip, attempts);
+	        return "ok";
+	    }
+	 
+	 public synchronized String rateLimiter(String username) {
+		    long currentTime = System.currentTimeMillis();
+		    List<Long> actions = globalActions.getOrDefault(username, new ArrayList<>());
+		    actions.removeIf(attemptTime -> currentTime - attemptTime > TimeUnit.MINUTES.toMillis(1));
+
+		    if (actions.size() >= 5) {
+		    	return TimeUnit.MILLISECONDS.toMinutes(TimeUnit.MINUTES.toMillis(5) - (currentTime - actions.get(0))) + " minutes and " +  
+		    			TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MINUTES.toMillis(5) - (currentTime - actions.get(0))) % 60 + " seconds.";
+		    }
+		    actions.add(currentTime);
+		    globalActions.put(username, actions);
+		    return "ok";
+		}
 	
 /*	public boolean CreatePost(User user, String content, String image)
 	{
