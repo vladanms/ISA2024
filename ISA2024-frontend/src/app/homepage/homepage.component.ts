@@ -24,5 +24,10 @@ export class HomepageComponent {
       }
     );
      }
+     
+    createPost()
+    {
+		this.router.navigate(['/createPost']);
+	}
 
 }

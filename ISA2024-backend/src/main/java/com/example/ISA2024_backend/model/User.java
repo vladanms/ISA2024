@@ -1,5 +1,6 @@
 package com.example.ISA2024_backend.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -52,6 +53,9 @@ public class User {
 	
 	@Column(name = "authorized")
 	private boolean authorized;
+	
+	@Column(name = "lastActive")
+	private LocalDateTime lastActive;
 	
 	@ElementCollection
 	@CollectionTable(name = "followers", joinColumns = @javax.persistence.JoinColumn(name = "user_id"))

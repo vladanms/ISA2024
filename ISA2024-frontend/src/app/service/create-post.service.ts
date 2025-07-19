@@ -6,18 +6,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CreatePostService {
- 
- apiHost: string = 'http://localhost:8091/';
-	  headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+ 	  apiHost: string = 'http://localhost:8091/';
+	  headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json',  'Accept': 'application/json' });
 	
 	  constructor(private http: HttpClient) { }
 	  
-	  create_post(content : string, image : File, location_x : number, location_y : number): Observable<any> {
-		let postDTO = {
-
-		};
-		
-		return this.http.post<any>(this.apiHost + 'user/userRegister', postDTO, {headers: this.headers});
+	  createPost(formData: FormData): Observable<any> {		
+		return this.http.post<any>(`${this.apiHost}post/createPost`, formData);
 	
 	}
 }

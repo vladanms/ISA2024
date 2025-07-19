@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,7 +67,7 @@ public class UserController{
 		  Authentication auth = authenticationManager.authenticate(
 		            new UsernamePasswordAuthenticationToken(loginDTO.getCredentials(), loginDTO.getPassword())
 		        );
-
+		  		SecurityContextHolder.getContext().setAuthentication(auth);
 		        response.put("credentials", loginDTO.getCredentials());
 		        return new ResponseEntity<>(response, HttpStatus.OK);
 		 } 

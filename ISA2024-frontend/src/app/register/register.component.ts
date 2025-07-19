@@ -38,6 +38,8 @@ export class RegisterComponent {
   get formControls() {
     return this.registerForm.controls;
   }
+  
+  
 
   onSubmit() {
     if (this.registerForm.invalid) {

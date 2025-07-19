@@ -7,11 +7,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
@@ -22,15 +26,31 @@ import com.example.ISA2024_backend.repository.UserRepository;
 @Service
 public class PostService {
 
+	 @Value("${image.directory:images}")
+	 private String imageDirectory;
+
+	@Autowired
 	private PostRepository posts;
 	
-	public void CreatePost(User owner, String image, String content, Float location_x, Float location_y)
+	public Boolean createPost(User owner, MultipartFile image, String content, Float location_x, Float location_y)  throws IOException
 	{
-		Post newPost = new Post(owner, image, content, location_x, location_y);
+		Post newPost = new Post(owner, "", content, location_x, location_y);
+		newPost = posts.save(newPost);
+		
+	    String format = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
+	    if(!format.equals(".jpg") && !format.equals(".png"))
+	    {
+		posts.delete(newPost);
+		return false;
+	    }
+		Files.copy(image.getInputStream(), Paths.get(imageDirectory, newPost.getId() + format), StandardCopyOption.REPLACE_EXISTING);
+		String imagePath = (Paths.get(imageDirectory, newPost.getId() + format)).toString();
+		newPost.setImagePath(imagePath);
 		posts.save(newPost);
+		return true;
 	}
 	
-	public void DeletePost(Post post)
+	public void deletePost(Post post)
 	{
 		posts.delete(post);
 	}
@@ -50,44 +70,18 @@ public class PostService {
 		return (ArrayList<Post>) posts.findAll();
 	}	
 	
-	public String saveImageToLocalStorage(String localDirectory, File originalImage) throws IOException {
-
-		/*MultipartFile image = new MockMultipartFile();
+	/*public Boolean copyImage(String name, MultipartFile imageFile) throws IOException {
 		
-        Path uploadPath = Path.of(localDirectory);
-        Path filePath = uploadPath.resolve(image.getOriginalFilename());
+	    String format = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf("."));
+	    if(!format.equals(".jpg") && !format.equals(".png"))
+	    {
+	    	return false;
+	    }
 
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return filePath.toString();*/
-		
-	    InputStream is = null;
-	    OutputStream os = null;
-		 try {
-		is = new FileInputStream(originalImage);
-        os = new FileOutputStream(localDirectory+File.separator+generateRandomName());
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = is.read(buffer)) > 0) {
-            os.write(buffer, 0, length);
-        }
-		 } finally {
-			 is.close();
-			 os.close();
-		 }
-		
-		/*try {
-		    Files.copy(originalImage.toPath(), Path.of(localDirectory+File.separator+originalImage.getName()), StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}*/
-		
-		return localDirectory+File.separator+generateRandomName();
-    }
+		 
+		Files.copy(imageFile.getInputStream(), Paths.get(imageDirectory, name + format), StandardCopyOption.REPLACE_EXISTING);
+		return true;
+    }*/
 	
 	public String getAbsolutePath(String path)
 	{
@@ -106,22 +100,5 @@ public class PostService {
             return null;
         }
 	}
-	
-	public String generateRandomName() 
-	 { 
-	StringBuilder sb = new StringBuilder(24);
-	 
-	  String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz0123456789"; 
-	  sb = new StringBuilder(19); 
-	 
-	  for (int i = 0; i < 19; i++)
-	  { 
-
-	   int index = (int)(characters.length() * Math.random()); 
-	  
-	   sb.append(characters.charAt(index)); 
-	  }
-	  return sb.toString(); 
-	 }
 	 
 }

@@ -48,7 +48,8 @@ public class SecurityConfig{
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                                 .antMatchers("/user/login", "/user/register").permitAll()
-                                .antMatchers("post/**").hasRole("USER_AUTHORIZED")
+                                .antMatchers("/post/**").permitAll()
+                                .antMatchers("/post/**").hasRole("USER_AUTHORIZED")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login.disable())

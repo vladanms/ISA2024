@@ -4,13 +4,15 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.springframework.web.multipart.MultipartFile;
+
 
 public class CreatePostDTO {
 
 	
 	private String owner;
 	private String content;
-	private File image;
+	private MultipartFile image;
 	private Float location_x;
 	private Float location_y;
 	
@@ -22,7 +24,7 @@ public class CreatePostDTO {
 	
 
 
-	public CreatePostDTO(String owner, File image, String content, Float location_x, Float location_y) {
+	public CreatePostDTO(String owner, MultipartFile image, String content, Float location_x, Float location_y) {
 		super();
 		this.owner = owner;
 		this.content = content;
@@ -34,14 +36,14 @@ public class CreatePostDTO {
 
 
 
-	public File getImage() {
+	public MultipartFile getImage() {
 		return image;
 	}
 
 
 
 
-	public void setImage(File image) {
+	public void setImage(MultipartFile image) {
 		this.image = image;
 	}
 

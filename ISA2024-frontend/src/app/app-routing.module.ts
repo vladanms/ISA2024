@@ -11,7 +11,7 @@ const routes: Routes = [
 	{path: 'guest-page', component : GuestPageComponent},
 	{path: 'register', component : RegisterComponent},
 	{path: 'homepage', component : HomepageComponent},
-	{path: 'create-post', component : CreatePostComponent},
+	{path: 'createPost', component : CreatePostComponent},
 ];
 
 @NgModule({
