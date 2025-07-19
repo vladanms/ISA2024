@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Comment {
 
-	private String users;
+	private String author;
 	private String content;
 	
 	
@@ -14,20 +14,20 @@ public class Comment {
 	}
 
 
-	public Comment(String users, String content) {
+	public Comment(String author, String content) {
 		super();
-		this.users = users;
+		this.author = author;
 		this.content = content;
 	}
 
 
 	public String getUsers() {
-		return users;
+		return author;
 	}
 
 
 	public void setUsers(String users) {
-		this.users = users;
+		this.author = users;
 	}
 
 

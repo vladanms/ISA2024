@@ -2,7 +2,7 @@ package com.example.ISA2024_backend.dto;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.example.ISA2024_backend.model.Comment;
 
@@ -11,9 +11,9 @@ public class PostDTO {
 
 	
 	private String owner;
-	private ArrayList<String> likes;
-	private ArrayList<Comment> comments;
-	private File imagePath;
+	private List<String> likes;
+	private List<Comment> comments;
+	private String imagePath;
 	private LocalDateTime time;
 	private String content;
 	private Float location_x;
@@ -27,7 +27,7 @@ public class PostDTO {
 	
 
 
-	public PostDTO(String owner, ArrayList<String> likes, ArrayList<Comment> comments, File imagePath,
+	public PostDTO(String owner, List<String> likes, List<Comment> comments, String imagePath,
 			LocalDateTime time, String content, Float location_x, Float location_y) {
 		super();
 		this.owner = owner;
@@ -53,32 +53,32 @@ public class PostDTO {
 	}
 
 
-	public ArrayList<String> getLikes() {
+	public List<String> getLikes() {
 		return likes;
 	}
 
 
-	public void setLikes(ArrayList<String> likes) {
+	public void setLikes(List<String> likes) {
 		this.likes = likes;
 	}
 
 
-	public ArrayList<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
 
-	public void setComments(ArrayList<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
 
-	public File getImagePath() {
+	public String getImagePath() {
 		return imagePath;
 	}
 
 
-	public void setImagePath(File imagePath) {
+	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
 

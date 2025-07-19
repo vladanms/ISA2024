@@ -20,6 +20,13 @@ create type comment as(
 	content text
 );
 
+CREATE TABLE comments (
+    post_id BIGINT not null,
+    author text not null,
+    content text not null,
+    foreign key (post_id) references posts(id) on delete cascade
+);
+
 create table posts
 (
 	id BIGSERIAL primary key,
@@ -86,37 +93,41 @@ INSERT INTO public.users (username, password, email, name,
 								
 
 
-INSERT INTO public.posts(owner, likes, comments, imagePath, time, content, location_x, location_y)
+
+INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
-					(SELECT id FROM public.users WHERE username = 'perica'),
-					null,
-					null,
-					'images/7ytre13avg65SHjk09jymmgr',
-					('2024-11-09 14:35:00'),
+					2,
+					'perica',
+					'{}',
+					'{}',
+					'images/7ytre13avg65SHjk09jymmgr.jpg',
+					('2025-07-07 14:00:00'),
 					'is a bunny',
 					100,
 					20					
 					);
 					
-INSERT INTO public.posts(owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
-					(SELECT id FROM public.users WHERE username = 'malialek')
-					null,
-					null,
-					'images/qweyhdbnflou64fabjd7lm62',
-					('2024-11-09 14:35:00'),
+					3,
+					'malialek',
+					'{}',
+					'{}',
+					'images/qweyhdbnflou64fabjd7lm62.jpg',
+					('2025-07-07 19:00:00'),
 					'bunbun',
 					80,
 					10					
 					);
 					
-INSERT INTO public.posts(owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
-					(SELECT id FROM public.users WHERE username = 'perica')
-					null,
-					null,
-					'images/9tdgb36yhfdki541dsfrgcvt',
-					('2024-11-11 08:22:30'),
+					2,
+					'perica',
+					'{}',
+					'{}',
+					'images/9tdgb36yhfdki541dsfrgcvt.jpg',
+					('2025-06-07 08:22:30'),
 					'is another bunny',
 					30,
 					30					

@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,9 +66,14 @@ public class PostService {
 		return (ArrayList<Post>) posts.findByOwner(owner);
 	}
 	
-	public ArrayList<Post> getAllPosts()
+	public List<Post> getPostsSortedByTime()
 	{
-		return (ArrayList<Post>) posts.findAll();
+		return (List<Post>) posts.findAllByOrderByTimeDesc();
+	}
+	
+	public List<Post> getAllPosts()
+	{
+		return (List<Post>) posts.findAll();
 	}	
 	
 	/*public Boolean copyImage(String name, MultipartFile imageFile) throws IOException {

@@ -14,10 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.example.ISA2024_backend.model.Comment;
 
 @Entity
+@Table(name = "posts")
 public class Post{
 	
 	@Id
@@ -25,16 +27,17 @@ public class Post{
 	@Column(name = "id", unique = true, nullable = false)
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User owner;
 	
     @ElementCollection
-    @CollectionTable(name = "likes", joinColumns = @javax.persistence.JoinColumn(name = "id"))
+    @CollectionTable(name = "likes", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "likes")
 	private List<String> likes;
 	
 	@ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "comments", joinColumns = @JoinColumn(name = "post_id"))
 	private List<Comment> comments;
 	
 	@Column(name = "imagePath", unique = false, nullable = false)

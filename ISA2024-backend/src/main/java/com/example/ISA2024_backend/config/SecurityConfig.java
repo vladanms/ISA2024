@@ -49,7 +49,8 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authz -> authz
                                 .antMatchers("/user/login", "/user/register").permitAll()
                                 .antMatchers("/post/**").permitAll()
-                                .antMatchers("/post/**").hasRole("USER_AUTHORIZED")
+                                .antMatchers("/images/**").permitAll()
+                               // .antMatchers("/post/**").hasRole("USER_AUTHORIZED")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login.disable())

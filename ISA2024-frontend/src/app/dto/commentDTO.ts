@@ -1,5 +1,5 @@
 export class commentDTO{
-	users !: string;
+	user !: string;
 	content!: string;
 	
 }

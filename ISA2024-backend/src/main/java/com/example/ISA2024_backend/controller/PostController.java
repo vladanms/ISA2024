@@ -3,6 +3,7 @@ package com.example.ISA2024_backend.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ISA2024_backend.dto.CreatePostDTO;
+import com.example.ISA2024_backend.dto.PostDTO;
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.service.PostService;
@@ -65,15 +67,34 @@ public class PostController {
         }
 	}
 	
-	@GetMapping("/getPostsByUser")
-	 public @ResponseBody ArrayList<Post> getPostsByUser(@Param("username") String username)
+	/*@GetMapping("/getPostsByUser")
+	 public @ResponseBody List<Post> getPostsByUser(@Param("username") String username)
 	{ 
 		return postService.getPostsByUser(username);
-	}
+	}*/
 	
 	@GetMapping("/getAllPosts")
-	 public @ResponseBody ArrayList<Post> getAllPosts()
+	 public ResponseEntity<List<PostDTO>> getAllPosts()
 	{ 
-		return postService.getAllPosts(); 
+		try {			
+			List<PostDTO> posts = new ArrayList<>();
+			for (Post post : postService.getPostsSortedByTime()) {
+			    PostDTO dto = new PostDTO(
+			        post.getOwner().getUsername(),
+			        post.getLikes(),
+			        post.getComments(),
+			        post.getImagePath(),
+			        post.getTime(),
+			        post.getContent(),
+			        post.getLocation_x(),
+			        post.getLocation_y()
+			    );
+			    posts.add(dto);
+			}
+			return new ResponseEntity<List<PostDTO>>(posts, HttpStatus.OK);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    	}	
 	}
 }
