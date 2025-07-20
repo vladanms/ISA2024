@@ -14,7 +14,7 @@ export class PostService {
   constructor(private http: HttpClient) {}
 
   getPosts(): Observable<postDTO[]> {
-    return this.http.get<postDTO[]>(`${this.apiHost}post/getAllPosts`);
+    return this.http.get<postDTO[]>(`${this.apiHost}post/getAllPosts`, {withCredentials: true});
   }
   
 }

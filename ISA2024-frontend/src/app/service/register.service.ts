@@ -27,7 +27,7 @@ export class RegisterService {
 		country : userDTO.country
 		};
 		
-		return this.http.post<any>(`${this.apiHost}user/register`, user, {headers: this.headers}).pipe(
+		return this.http.post<any>(`${this.apiHost}user/register`, user, {headers: this.headers, withCredentials: true }).pipe(
 		  tap(response => {
           if (response && response.registered) {
             console.log("Succesfully regisetred:", response.registered);

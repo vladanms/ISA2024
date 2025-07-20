@@ -102,4 +102,16 @@ public class PostController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     	}	
 	}
+	
+	@PostMapping("/comment")
+	public ResponseEntity<Map<String, String>> comment()
+	{
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/like")
+	public ResponseEntity<Map<String, String>> like()
+	{
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

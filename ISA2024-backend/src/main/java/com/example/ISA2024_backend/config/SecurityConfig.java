@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -44,26 +45,29 @@ public class SecurityConfig{
     @Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        		.cors(withDefaults())
+                .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
+                .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(authz -> authz
                                 .antMatchers("/user/login", "/user/register").permitAll()
-                                .antMatchers("/post/**").permitAll()
+                                .antMatchers("/post/getAllPosts").permitAll()
                                 .antMatchers("/images/**").permitAll()
-                               // .antMatchers("/post/**").hasRole("USER_AUTHORIZED")
+                                .antMatchers("/post/createPost", "/post/comment", "/post/like").hasRole("USER_AUTHORIZED")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login.disable())
-                .httpBasic(withDefaults())
-        		.logout(logout -> logout
-                .logoutUrl("/user/logout")                 
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                })
-                .invalidateHttpSession(true)     
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")      
-            );
+                .logout(logout -> logout
+                                .logoutUrl("/user/logout")
+                                .logoutSuccessHandler((request, response, authentication) -> {
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                })
+                                .invalidateHttpSession(true)
+                                .clearAuthentication(true)
+                                .deleteCookies("JSESSIONID")
+                )
+                .sessionManagement(session -> session
+                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                );
         			
         return http.build();
     }

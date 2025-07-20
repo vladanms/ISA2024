@@ -51,6 +51,7 @@ export class CreatePostComponent{
       tap(response => {
           if (response && response.success) {
             console.log("Post created!");
+            this.router.navigate(['/homepage']);
           } else if (response && response.error) {
             console.log("Error creating post:", response.error);
           }

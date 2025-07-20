@@ -12,7 +12,7 @@ export class CreatePostService {
 	  constructor(private http: HttpClient) { }
 	  
 	  createPost(formData: FormData): Observable<any> {		
-		return this.http.post<any>(`${this.apiHost}post/createPost`, formData);
+		return this.http.post<any>(`${this.apiHost}post/createPost`, formData, {withCredentials: true});
 	
 	}
 }

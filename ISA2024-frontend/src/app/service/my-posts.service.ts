@@ -23,6 +23,6 @@ export class MyPostsService implements OnInit{
   constructor(private http: HttpClient) { }
   
   getMyPosts(): Observable<postDTO[]>{
-	   return this.http.get<postDTO[]>(this.apiHost + 'posts/getPostsByUser?username=' + this.owner , {headers: this.headers});
+	   return this.http.get<postDTO[]>(this.apiHost + 'posts/getPostsByUser?username=' + this.owner , {headers: this.headers, withCredentials: true });
   }
 }

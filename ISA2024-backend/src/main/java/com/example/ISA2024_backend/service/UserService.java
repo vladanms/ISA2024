@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
 	        if (user.getAuthorized()) {
 	            builder.roles("USER_AUTHORIZED");
 	        } else {
-	            builder.roles();
+	            builder.roles("");
 	        }
 
 	        return builder.build();

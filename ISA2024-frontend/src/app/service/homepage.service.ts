@@ -21,7 +21,7 @@ logout(): Observable<any> {
         console.log("Logging out user:", loggedUser);
 
         // Send logout request to backend
-        return this.http.post<any>(`${this.apiHost}user/logout`, loggedUser, { headers: this.headers })
+        return this.http.post<any>(`${this.apiHost}user/logout`, loggedUser, { headers: this.headers, withCredentials: true  })
             .pipe(
                 tap(response => {
                     if (response && response.message) {
