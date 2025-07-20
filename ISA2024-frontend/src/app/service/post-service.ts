@@ -17,4 +17,12 @@ export class PostService {
     return this.http.get<postDTO[]>(`${this.apiHost}post/getAllPosts`, {withCredentials: true});
   }
   
+   like(): Observable<any> {
+   return this.http.post<any>(`${this.apiHost}post/like`, {}, {withCredentials: true});
+  }
+  
+   comment(): Observable<any> {
+   return this.http.post<any>(`${this.apiHost}post/comment`, {}, {withCredentials: true});
+  }
+  
 }

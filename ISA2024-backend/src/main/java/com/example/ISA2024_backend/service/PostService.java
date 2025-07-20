@@ -56,11 +56,6 @@ public class PostService {
 		posts.delete(post);
 	}
 	
-	public void Comment(Post post)
-	{
-		//this function does nothing, it's to be called only for testing purposes.
-	}
-	
 	public ArrayList<Post> getPostsByUser(String owner)
 	{
 		return (ArrayList<Post>) posts.findByOwner(owner);
@@ -75,19 +70,6 @@ public class PostService {
 	{
 		return (List<Post>) posts.findAll();
 	}	
-	
-	/*public Boolean copyImage(String name, MultipartFile imageFile) throws IOException {
-		
-	    String format = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf("."));
-	    if(!format.equals(".jpg") && !format.equals(".png"))
-	    {
-	    	return false;
-	    }
-
-		 
-		Files.copy(imageFile.getInputStream(), Paths.get(imageDirectory, name + format), StandardCopyOption.REPLACE_EXISTING);
-		return true;
-    }*/
 	
 	public String getAbsolutePath(String path)
 	{

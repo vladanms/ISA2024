@@ -11,8 +11,8 @@
        style="display: block; margin-bottom: 10px;" />
   <p></p>
   <div>{{ post.content }}</div>
-  <button (click)="like(post.id)">Like</button>
-  <button (click)="comment(post.id)">Comment</button>
+  <button (click)="like()">Like</button>
+  <button (click)="comment()">Comment</button>
   <hr>
   <div>{{ post.likes.length || 0 }} users like this.</div>
   <hr>

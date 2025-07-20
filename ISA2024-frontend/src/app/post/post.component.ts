@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { PostService } from '../service/post-service';
 import { postDTO } from '../dto/postDTO';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -10,12 +12,45 @@ export class PostComponent {
   
   @Input() posts: postDTO[] = [];
 
+	constructor(private postService: PostService) { }
 
-  like(id: number): void {
-    console.log('You liked the post with the id of:', id);
+  like(): void {
+     this.postService.like()
+      .pipe(
+        tap({
+			next : (response)=> 
+			{
+				if(response && response.success)
+				{
+				alert(response.success);
+				}
+			},
+			error: () => 
+			{
+				alert("You must be logged in to do that!")	
+			}
+        })
+      )
+      .subscribe();
   }
 
-  comment(id: number): void {
-    console.log('You commented on the post with the id of:', id);
+  comment(): void {
+    this.postService.comment()
+      .pipe(
+        tap({
+			next : (response)=> 
+			{
+				if(response && response.success)
+				{
+				alert(response.success);
+				}
+			},
+			error: () => 
+			{
+				alert("You must be logged in to do that!")	
+			}
+        })
+      )
+      .subscribe();
   }
 }

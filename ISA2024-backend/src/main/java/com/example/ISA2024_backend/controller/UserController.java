@@ -69,6 +69,7 @@ public class UserController{
 		        );
 		  		SecurityContextHolder.getContext().setAuthentication(auth);
 		        response.put("credentials", loginDTO.getCredentials());
+		        userService.setLastActive(loginDTO.getCredentials());
 		        return new ResponseEntity<>(response, HttpStatus.OK);
 		 } 
 		 catch (AuthenticationException e) {
@@ -93,6 +94,7 @@ public class UserController{
 		        }
 		    	if(currentUser.getUsername().equals(username))
 		    	{
+			    userService.setLastActive(username);
 		    	response.put("username", username);
 		    	currentUser = null;
 			    return new ResponseEntity<>(response, HttpStatus.OK);
@@ -162,25 +164,4 @@ public class UserController{
 	        return false;
 	    }
 	}
-	
-/*	@PutMapping("/createPost")
-	public ResponseEntity<String> createPost(@RequestBody PostDTO postDTO) throws MessagingException, UnsupportedEncodingException
-	{
-		
-		userService.CreatePost(currentUser, postDTO.getImagePath(), postDTO.getContent());
-		return new ResponseEntity<>("Succesfully registered", HttpStatus.OK);
-	}
-	
-	@GetMapping("/getPosts")
-	 public @ResponseBody ArrayList<Post> getPostsByUser(String username)
-	{ 
-		return userService.getByUsername(username).getPosts(); 
-	}
-	
-	@GetMapping("/getAllPosts")
-	 public @ResponseBody ArrayList<Post> getAllPosts()
-	{ 
-		return userService.getAllPosts(); 
-	}
-	*/
 }

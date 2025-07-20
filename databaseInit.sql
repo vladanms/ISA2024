@@ -44,7 +44,7 @@ create table posts
 
 INSERT INTO public.users (username, password, email, name, 
 						  surname, address,
-						  city, country, verification, authorized, followers, followed)
+						  city, country, verification, authorized)
 						  VALUES('user1', 
 								 '1234', 
 								 'user123454321@gmail.com',
@@ -54,13 +54,11 @@ INSERT INTO public.users (username, password, email, name,
 								 'novi sad', 
 								 'srbija',
 								 'asdfcgasiu1Mpd72vdp7',
-								 true,
-								'{}',
-								'{}');
+								 true);
 								
 INSERT INTO public.users (username, password, email, name, 
 						  surname, address,
-						  city, country, verification, authorized, followers, followed)
+						  city, country, verification, authorized)
 						  VALUES('perica', 
 								 '0000', 
 								 'perica12342@gmail.com',
@@ -70,13 +68,11 @@ INSERT INTO public.users (username, password, email, name,
 								 'novi sad', 
 								 'srbija',
 								 '896dhoa67nsy65olsjht',
-								 true,
-								'{}',
-								'{}');
+								 true);
 								
 INSERT INTO public.users (username, password, email, name, 
 						  surname, address,
-						  city, country, verification, authorized, followers, followed)
+						  city, country, verification, authorized)
 						  VALUES('malialek', 
 								 'abcdefgh', 
 								 'aca759426@gmail.com',
@@ -86,18 +82,15 @@ INSERT INTO public.users (username, password, email, name,
 								 'novi sad', 
 								 'srbija',
 								 'mjhgrdcs82ps28hnaja',
-								 true,
-								'{}',
-								'{}');
+								 true);
 								
 								
 
 
 
-INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(user_id, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
 					2,
-					'perica',
 					'{}',
 					'{}',
 					'images/7ytre13avg65SHjk09jymmgr.jpg',
@@ -107,10 +100,9 @@ INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, conte
 					20					
 					);
 					
-INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(user_id, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
 					3,
-					'malialek',
 					'{}',
 					'{}',
 					'images/qweyhdbnflou64fabjd7lm62.jpg',
@@ -120,10 +112,9 @@ INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, conte
 					10					
 					);
 					
-INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, content, location_x, location_y)
+INSERT INTO public.posts(user_id, likes, comments, imagePath, time, content, location_x, location_y)
 					VALUES(
 					2,
-					'perica',
 					'{}',
 					'{}',
 					'images/9tdgb36yhfdki541dsfrgcvt.jpg',
@@ -132,3 +123,8 @@ INSERT INTO public.posts(user_id, owner, likes, comments, imagePath, time, conte
 					30,
 					30					
 					);
+					
+INSERT INTO public.comments (post_id, author, content)
+					VALUES (1,
+					'malialek',
+					'brze jace bolje');

@@ -92,6 +92,7 @@ public class User {
 		this.followed = followed;
 		this.posts = posts;
 		this.authorized = false;
+		this.lastActive = LocalDateTime.now();
 	}
 
 	public Long getId() {
@@ -204,6 +205,14 @@ public class User {
 
 	public void setAuthorized(boolean authorized) {
 		this.authorized = authorized;
+	}
+
+	public LocalDateTime getLastActive() {
+		return lastActive;
+	}
+
+	public void setLastActive(LocalDateTime lastActive) {
+		this.lastActive = lastActive;
 	}
 	
 	

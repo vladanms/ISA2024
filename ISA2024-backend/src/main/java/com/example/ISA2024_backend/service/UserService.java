@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,16 +26,18 @@ import org.springframework.stereotype.Service;
 import com.example.ISA2024_backend.dto.LoginDTO;
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
+import com.example.ISA2024_backend.repository.PostRepository;
 import com.example.ISA2024_backend.repository.UserRepository;
-
-import main.model.UserRegistered;
 
 @Service
 public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository users;
-	//private JavaMailSender sender;
+	
+	@Autowired
+	private PostRepository posts;
+	private JavaMailSender sender;
 	private final Map<String, List<Long>> loginAttempts = new ConcurrentHashMap<>();
 	private final Map<String, List<Long>> globalActions = new ConcurrentHashMap<>();
  //   private final PasswordEncoder passwordEncoder;
@@ -81,27 +84,22 @@ public class UserService implements UserDetailsService {
 
 	        return builder.build();
 	    }
-	
-	/*public User login(LoginDTO loginDTO)	
-	{
-		User toLogin = users.findByUsername(loginDTO.getCredentials());
-		if(toLogin != null)
-		{
-			if(toLogin.getPassword().equals(toLogin.getPassword()))
-			{
-				return users.findByUsername(loginDTO.getCredentials());
-			}
-		}
-		toLogin = users.findByEmail(loginDTO.getCredentials());
-		if(toLogin != null)
-		{
-			if(toLogin.getPassword().equals(toLogin.getPassword()))
-			{
-				return users.findByEmail(loginDTO.getCredentials());
-			}
-		}
-		return null;
-	}*/
+	 
+	 public void setLastActive(String credentials){
+		 User user = users.findByUsername(credentials);
+		  if (user == null) {
+	            user = users.findByEmail(credentials);
+	            if (user == null) {
+	                throw new UsernameNotFoundException("User not found!");
+	            }
+		  }
+		 if(user != null)
+		 {
+			 user.setLastActive(LocalDateTime.now());
+			 users.save(user);
+		 }
+
+	 }		 
 	
 	public User getByUsername(String username) 
 	{
@@ -133,15 +131,23 @@ public class UserService implements UserDetailsService {
 	  return sb.toString(); 
 	 }
 	
-	/*public void verificationEmail(User user) throws MessagingException, UnsupportedEncodingException 
+	@Scheduled(cron = "0 0 0 * * *")
+	public void reminderEmail() throws MessagingException, UnsupportedEncodingException 
 	{
+		List<User> userList = ((UserRepository) users).findAllByLastActiveBefore(LocalDateTime.now().minusDays(7));
+		
+		for(User user : userList)
+		{
+		List<Post> nearbyPosts = posts.findAllByOwner_CityAndTimeAfter(user.getCity(), user.getLastActive());
+			
 	    String toAddress = user.getEmail();
-	    String fromAddress = "OnlyBuns verification";
+	    String fromAddress = "OnlyBuns";
 	    String senderName = "OnlyBuns";
-	    String subject = "Verification";
-	    String content = "[[user]],<br>"
-	            + "You're one step away from copleting your registration. To finalize, please open the following link:<br>"
-	            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>";
+	    String subject = "We miss you!";
+	    String content = user.getUsername() + ",<br>"
+	            + "You've been away for some time. Since we've seen you last, other bunny lovers from " + user.getCity() + " have made " + nearbyPosts.size() + "new posts."
+	            + " Come check them out! <br><br>"
+	            + "OnlyBuns team";
 	     
 	    MimeMessage message = sender.createMimeMessage();
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -150,13 +156,11 @@ public class UserService implements UserDetailsService {
 	    helper.setTo(toAddress);
 	    helper.setSubject(subject);
 	     
-	    content = content.replace("[[user]]", user.getUsername());
-	    content = content.replace("[[URL]]", "http://localhost:8091/user/verify?username=" + user.getUsername() +"&code=" + user.getVerification());
-	     
 	    helper.setText(content, true);
 	     
 	    sender.send(message);
-	}*/
+		}
+	}
 	
 	public boolean verification(String username, String verification)
 	{

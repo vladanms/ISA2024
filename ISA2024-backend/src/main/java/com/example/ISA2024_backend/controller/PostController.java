@@ -68,12 +68,6 @@ public class PostController {
         }
 	}
 	
-	/*@GetMapping("/getPostsByUser")
-	 public @ResponseBody List<Post> getPostsByUser(@Param("username") String username)
-	{ 
-		return postService.getPostsByUser(username);
-	}*/
-	
 	@GetMapping("/getAllPosts")
 	 public ResponseEntity<List<PostDTO>> getAllPosts()
 	{ 
@@ -104,14 +98,18 @@ public class PostController {
 	}
 	
 	@PostMapping("/comment")
-	public ResponseEntity<Map<String, String>> comment()
+	public ResponseEntity<Map <String, String>> comment()
 	{
-		return new ResponseEntity<>(HttpStatus.OK);
+		Map<String, String> response = new HashMap<>();
+		response.put("success", "You left a comment!");
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/like")
-	public ResponseEntity<Map<String, String>> like()
+	public ResponseEntity<Map <String, String>> like()
 	{
-		return new ResponseEntity<>(HttpStatus.OK);
+		Map<String, String> response = new HashMap<>();
+		response.put("success", "You liked a post!");
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
