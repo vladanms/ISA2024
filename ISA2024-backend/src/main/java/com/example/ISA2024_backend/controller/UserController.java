@@ -9,7 +9,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,15 +28,17 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.example.ISA2024_backend.dto.LoginDTO;
 import com.example.ISA2024_backend.dto.RegisterDTO;
-import com.example.ISA2024_backend.model.Post;
-import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "user")
+@Tag(name = "User Controller", description = "All user-related operations")
 public class UserController{
 	
 	@Autowired
@@ -51,6 +51,13 @@ public class UserController{
 	private AuthenticationManager authenticationManager;
 	
 	
+	 @Operation(summary = "Log in", description = "Log in and authorize a user.", responses = 
+		 		{
+		            @ApiResponse(responseCode = "200", description = "Success"),
+		            @ApiResponse(responseCode = "400", description = "Invalid credentials"),
+		            @ApiResponse(responseCode = "429", description = "Too many attempts"),
+		            @ApiResponse(responseCode = "500", description = "Internal server error")
+		        })
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request){
 		
@@ -81,6 +88,12 @@ public class UserController{
 		    }
 	}
 	
+	@Operation(summary = "Log out", description = "Log out and clear authorization.", responses = 
+	 		{
+	            @ApiResponse(responseCode = "200", description = "Success"),
+	            @ApiResponse(responseCode = "400", description = "Invalid request"),
+	            @ApiResponse(responseCode = "500", description = "Internal server error")
+	        })
 	@PostMapping("/logout")
 	public ResponseEntity<Map<String, String>> logout(@RequestBody String username){
 		
@@ -112,35 +125,20 @@ public class UserController{
 		        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
 	}
-	
+    @Operation(summary = "Register a new user", description = "Register a new user with details provided.", responses = 
+    		{
+                @ApiResponse(responseCode = "200", description = "Success"),
+                @ApiResponse(responseCode = "400", description = "Username or email taken"),
+                @ApiResponse(responseCode = "500", description = "Internal server error")
+            })
 	@PostMapping("/register")
 	public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDTO userDTO) throws MessagingException, UnsupportedEncodingException
 	{
-		
-	    List<String> followers = new ArrayList<>();
-	    List<String> followed = new ArrayList<>();
-	    List<Post> posts = new ArrayList<>(); 
-	    
-		User user = new User();
-		
-		user.setUsername(userDTO.getUsername());
-		user.setPassword(passwordEncoder.encode(userDTO.getPassword())); 
-		user.setEmail(userDTO.getEmail());
-		user.setName(userDTO.getName());
-		user.setSurname(userDTO.getSurname());
-		user.setAddress(userDTO.getAddress());
-		user.setCity(userDTO.getCity());
-		user.setCountry(userDTO.getCountry());
-		user.setPosts(posts);
-		user.setFollowed(followed);
-		user.setFollowers(followers);
-		user.setVerification(userService.generateVerification());
-		user.setAuthorized(true);
-		
+
 		Map<String, String> response = new HashMap<>();
 		
 		try {
-			String register = userService.register(user);
+			String register = userService.register(userDTO, passwordEncoder);
 		if(register.equals("usernameError"))
 		{
 			response.put("error", "Username taken. Please select another one.");
@@ -158,14 +156,5 @@ public class UserController{
 		        response.put("error", "An error occurred while processing the registration request.");
 		        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
-	}
-	
-	@GetMapping("/verify")
-	public boolean verifyUser(@Param("username") String username, @Param("code") String code) {
-	    if (userService.verification(username, code)) {
-	        return true;
-	    } else {
-	        return false;
-	    }
 	}
 }

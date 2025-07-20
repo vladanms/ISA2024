@@ -6,17 +6,27 @@ import java.util.List;
 
 import com.example.ISA2024_backend.model.Comment;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 
 public class PostDTO {
 
 	
+	@Schema(description = "Username of the post's creator")
 	private String owner;
+	@Schema(description = "List of usernames ofu sers who liked this post")
 	private List<String> likes;
+	@Schema(description = "List of comments left on this post")
 	private List<Comment> comments;
+	@Schema(description = "Path to the post's image within the app directory")
 	private String imagePath;
+	@Schema(description = "Time of post creation, automatically set to LocalDateTime.Now() upon creation")
 	private LocalDateTime time;
+	@Schema(description = "Textual content of the post")
 	private String content;
+	@Schema(description = "X coordinates of the owner's location")
 	private Float location_x;
+	@Schema(description = "Y coordinates of the owner's location")
 	private Float location_y;
 	
 	

@@ -19,8 +19,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.ISA2024_backend.dto.RegisterDTO;
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.repository.PostRepository;
@@ -34,18 +36,40 @@ public class UserService implements UserDetailsService {
 	
 	@Autowired
 	private PostRepository posts;
+	
+	@Autowired
 	private JavaMailSender sender;
 	private final Map<String, List<Long>> loginAttempts = new ConcurrentHashMap<>();
 	
-	public String register(User user) throws MessagingException, UnsupportedEncodingException {
-		User toRegister = users.findByEmail(user.getEmail());
+	public String register(RegisterDTO userDTO, PasswordEncoder encoder) throws MessagingException, UnsupportedEncodingException {
+		User toRegister = users.findByEmail(userDTO.getEmail());
 		if(toRegister != null) {
 			return "emailError";
 		}
-		toRegister = users.findByUsername(user.getUsername());
+		toRegister = users.findByUsername(userDTO.getUsername());
 		if(toRegister != null) {
 			return "usernameError";
 		}
+		
+	    List<String> followers = new ArrayList<>();
+	    List<String> followed = new ArrayList<>();
+	    List<Post> posts = new ArrayList<>(); 
+	    
+		User user = new User();
+		
+		user.setUsername(userDTO.getUsername());
+		user.setPassword(encoder.encode(userDTO.getPassword())); 
+		user.setEmail(userDTO.getEmail());
+		user.setName(userDTO.getName());
+		user.setSurname(userDTO.getSurname());
+		user.setAddress(userDTO.getAddress());
+		user.setCity(userDTO.getCity());
+		user.setCountry(userDTO.getCountry());
+		user.setPosts(posts);
+		user.setFollowed(followed);
+		user.setFollowers(followers);
+		user.setVerification(generateVerification());
+		user.setAuthorized(true);
 		users.save(user);
 		return "success";
 	}
@@ -120,17 +144,39 @@ public class UserService implements UserDetailsService {
 	  return sb.toString(); 
 	 }
 	
+	public void testMail() throws MessagingException, UnsupportedEncodingException 
+	{
+	    String toAddress = "recipient@gmail.com"; //change this to your e-mail when testing
+	    String fromAddress = "sender@gmail.com";  //change this to your e-mail when testing
+	    String senderName = "OnlyBuns";
+	    String subject = "test";
+	    String content = "email service works!";
+	     
+	    MimeMessage message = sender.createMimeMessage();
+	    MimeMessageHelper helper = new MimeMessageHelper(message);
+	     
+	    helper.setFrom(fromAddress, senderName);
+	    helper.setTo(toAddress);
+	    helper.setSubject(subject);
+	     
+	    helper.setText(content, true);
+	     
+	    sender.send(message);
+	    
+	    System.out.println("mail sent!");
+	}
+	
 	@Scheduled(cron = "0 0 0 * * *")
 	public void reminderEmail() throws MessagingException, UnsupportedEncodingException 
 	{
-		List<User> userList = ((UserRepository) users).findAllByLastActiveBefore(LocalDateTime.now().minusDays(7));
+		List<User> userList = users.findAllByLastActiveBefore(LocalDateTime.now().minusDays(7));
 		
 		for(User user : userList)
 		{
 		List<Post> nearbyPosts = posts.findAllByOwner_CityAndTimeAfter(user.getCity(), user.getLastActive());
 			
 	    String toAddress = user.getEmail();
-	    String fromAddress = "OnlyBuns";
+	    String fromAddress = "vladans995@gmail.com";
 	    String senderName = "OnlyBuns";
 	    String subject = "We miss you!";
 	    String content = user.getUsername() + ",<br>"

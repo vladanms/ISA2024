@@ -52,6 +52,7 @@ public class SecurityConfig{
                                 .antMatchers("/user/login", "/user/register").permitAll()
                                 .antMatchers("/post/getAllPosts").permitAll()
                                 .antMatchers("/images/**").permitAll()
+                                .antMatchers( "/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html" ).permitAll()
                                 .antMatchers("/post/createPost", "/post/comment", "/post/like").hasRole("USER_AUTHORIZED")
                                 .anyRequest().authenticated()
                 )

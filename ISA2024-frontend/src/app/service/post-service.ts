@@ -24,5 +24,6 @@ export class PostService {
    comment(): Observable<any> {
    return this.http.post<any>(`${this.apiHost}post/comment`, {}, {withCredentials: true});
   }
+
   
 }

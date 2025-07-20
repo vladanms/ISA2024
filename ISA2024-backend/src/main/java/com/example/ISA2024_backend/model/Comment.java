@@ -2,10 +2,14 @@ package com.example.ISA2024_backend.model;
 
 import javax.persistence.Embeddable;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Embeddable
 public class Comment {
 
+	@Schema(description = "Username of the author of a comment")
 	private String author;
+	@Schema(description = "Comment body")
 	private String content;
 	
 	

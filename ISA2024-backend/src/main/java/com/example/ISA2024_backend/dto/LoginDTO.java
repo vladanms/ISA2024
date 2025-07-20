@@ -1,8 +1,12 @@
 package com.example.ISA2024_backend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class LoginDTO {
 
+	@Schema(description = "Email or username")
 	private String credentials;
+	@Schema(description = "Password")
 	private String password;
 	
 	public LoginDTO() {

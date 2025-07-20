@@ -6,14 +6,20 @@ import java.util.ArrayList;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 
 public class CreatePostDTO {
 
-	
+	@Schema(description = "Username of the post's creator")
 	private String owner;
+	@Schema(description = "Text content of the post")
 	private String content;
+	@Schema(description = "Image to be uploaded - copied into app directory and given a unique name")
 	private MultipartFile image;
+	@Schema(description = "X coordinates of the owner's location")
 	private Float location_x;
+	@Schema(description = "Y coordinates of the owner's location")
 	private Float location_y;
 	
 	

@@ -1,0 +1,14 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+	
+	    <cache name="postLocationCache"
+           maxEntriesLocalHeap="100"
+           timeToLiveSeconds="300"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+
+    <cache name="postImageCache"
+           maxEntriesLocalHeap="100"
+           timeToLiveSeconds="300"
+           memoryStoreEvictionPolicy="LRU" />
+</ehcache>

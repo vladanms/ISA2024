@@ -3,6 +3,7 @@ package com.example.ISA2024_backend.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 import com.example.ISA2024_backend.model.Comment;
 
 @Entity
+@Cacheable
 @Table(name = "posts")
 public class Post{
 	

@@ -25,6 +25,7 @@ import { GuestPageComponent } from './guest-page/guest-page.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { MyPostsComponent } from './my-posts/my-posts.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
+import { TimePipe } from './pipe/time.pipe';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MainHeaderComponent } from './main-header/main-header.component';
     GuestPageComponent,
     CreatePostComponent,
     MyPostsComponent,
-    MainHeaderComponent
+    MainHeaderComponent,
+    TimePipe,
   ],
   imports: [
     BrowserModule,

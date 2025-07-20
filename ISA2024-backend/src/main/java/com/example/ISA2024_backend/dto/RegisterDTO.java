@@ -2,16 +2,25 @@ package com.example.ISA2024_backend.dto;
 
 import java.util.ArrayList;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class RegisterDTO {
 
-
+	@Schema(description = "Unique username")
 	private String username;
+	@Schema(description = "Password")
 	private String password;
+	@Schema(description = "Unique e-mail")
 	private String email;
+	@Schema(description = "User's name")
 	private String name;
+	@Schema(description = "User's surname")
 	private String surname;
+	@Schema(description = "User's home address")
 	private String address;
+	@Schema(description = "User's home city")
 	private String city;
+	@Schema(description = "User's country")
 	private String country;
 
 	public RegisterDTO() {

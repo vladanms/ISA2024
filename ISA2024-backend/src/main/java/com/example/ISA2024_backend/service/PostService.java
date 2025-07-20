@@ -22,7 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.repository.PostRepository;
-import com.example.ISA2024_backend.repository.UserRepository;
+
+import org.springframework.cache.CacheManager;
 
 @Service
 public class PostService {
@@ -31,12 +32,12 @@ public class PostService {
 	private String imageDirectory;
 	private final Map<String, List<Long>> globalActions = new ConcurrentHashMap<>();
 
+    @Autowired
+    private CacheManager cacheManager;
+	
 	@Autowired
 	private PostRepository posts;
-	
-	@Autowired
-	private UserRepository users;
-	
+
 	public Boolean createPost(User owner, MultipartFile image, String content, Float location_x, Float location_y)  throws IOException
 	{
 		Post newPost = new Post(owner, "", content, location_x, location_y);
@@ -51,9 +52,29 @@ public class PostService {
 		Files.copy(image.getInputStream(), Paths.get(imageDirectory, newPost.getId() + format), StandardCopyOption.REPLACE_EXISTING);
 		String imagePath = (Paths.get(imageDirectory, newPost.getId() + format)).toString();
 		newPost.setImagePath(imagePath);
+		
+		Float[] location = new Float[]{location_x, location_y};
+        cacheManager.getCache("postLocationCache").put(newPost.getId(), location);
+        
+       /* Float[] locationCheck = cacheManager.getCache("postLocationCache").get(newPost.getId(), Float[].class);
+        System.out.println("Cache check!" + locationCheck);*/
+        
 		posts.save(newPost);
 		return true;
 	}
+	
+	public void cacheImage(Post post) throws IOException
+	{
+		byte[] imageBytes = Files.readAllBytes(Path.of(post.getImagePath()));
+		cacheManager.getCache("postImageCache").put(post.getId(), imageBytes);
+		
+		/*S
+		byte[] imageCheck = cacheManager.getCache("postImageCache").get(post.getId(), byte[].class);
+		System.out.println("Cache check!");
+		System.out.println(imageCheck.toString());
+		 */
+	}
+	
 	
 	public void deletePost(Post post)
 	{
@@ -75,25 +96,9 @@ public class PostService {
 		return (List<Post>) posts.findAll();
 	}	
 	
-	public String getAbsolutePath(String path)
-	{
-		File finalImage = new File(path);
-		return finalImage.getAbsolutePath();
-    }
-	
-	
-	public byte[] getImage(String localDirectory, String imageName) throws IOException {
-        Path imagePath = Path.of(localDirectory, imageName);
-
-        if (Files.exists(imagePath)) {
-            byte[] imageBytes = Files.readAllBytes(imagePath);
-            return imageBytes;
-        } else {
-            return null;
-        }
-	}
 	 
-	 public synchronized String rateLimiter() {
+	public synchronized String rateLimiter() 
+	{
 		 
 		 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		    long currentTime = System.currentTimeMillis();
@@ -107,6 +112,7 @@ public class PostService {
 		    actions.add(currentTime);
 		    globalActions.put(authentication.getName(), (actions));
 		    return "ok";
-		}
+	}
+	
 	
 }

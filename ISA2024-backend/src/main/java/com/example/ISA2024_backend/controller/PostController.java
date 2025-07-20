@@ -29,11 +29,15 @@ import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.service.PostService;
 import com.example.ISA2024_backend.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "post")
-
+@Tag(name = "Post Controller", description = "All post-related operations")
 public class PostController {
 
 	@Autowired
@@ -42,8 +46,14 @@ public class PostController {
 	@Autowired
 	private UserService userService;
 	
-	private String localDirectory = "/images";
 	
+	@Operation(summary = "Create post", description = "Create a new post.", responses = 
+	 		{
+	            @ApiResponse(responseCode = "200", description = "Success"),
+	            @ApiResponse(responseCode = "400", description = "Invalid image format"),
+	            @ApiResponse(responseCode = "403", description = "User not authorized"),
+	            @ApiResponse(responseCode = "500", description = "Internal server error")
+	        })
 	@PostMapping("/createPost")
 	public ResponseEntity<Map<String, String>> createPost(@ModelAttribute CreatePostDTO postDTO) throws MessagingException, IOException
 	{
@@ -67,7 +77,11 @@ public class PostController {
 	        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}
-	
+	@Operation(summary = "Get posts", description = "Retrieve all posts, sorted by time descending.", responses = 
+ 		{
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+        })
 	@GetMapping("/getAllPosts")
 	 public ResponseEntity<List<PostDTO>> getAllPosts()
 	{ 
@@ -83,12 +97,9 @@ public class PostController {
 			        post.getContent(),
 			        post.getLocation_x(),
 			        post.getLocation_y()
-			    );
-	        	for (Comment comment : dto.getComments())
-	        	{
-	        		System.out.println(comment.getAuthor() + "says: " + comment.getContent());
-	        	}
+			    );	        
 			    posts.add(dto);
+			    postService.cacheImage(post);
 			}
 			return new ResponseEntity<List<PostDTO>>(posts, HttpStatus.OK);			
 		} catch (Exception e) {
@@ -97,6 +108,12 @@ public class PostController {
     	}	
 	}
 	
+	@Operation(summary = "Comment", description = "Mock comment function for testing authorization and rate limiter.", responses = 
+ 		{
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "403", description = "User not authorized"),
+            @ApiResponse(responseCode = "429", description = "Too many attempts")
+        })
 	@PostMapping("/comment")
 	public ResponseEntity<Map <String, String>> comment()
 	{
@@ -110,6 +127,12 @@ public class PostController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@Operation(summary = "Like", description = "Mock like function for testing authorization and rate limiter.", responses = 
+ 		{
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "403", description = "User not authorized"),
+            @ApiResponse(responseCode = "429", description = "Too many attempts")
+        })
 	@PostMapping("/like")
 	public ResponseEntity<Map <String, String>> like()
 	{
