@@ -15,12 +15,9 @@ export class HomepageService {
   
   
 logout(): Observable<any> {
-    const loggedUser = localStorage.getItem('loggedUser');
-    
+    const loggedUser = localStorage.getItem('loggedUser');    
     if (loggedUser) {
         console.log("Logging out user:", loggedUser);
-
-        // Send logout request to backend
         return this.http.post<any>(`${this.apiHost}user/logout`, loggedUser, { headers: this.headers, withCredentials: true  })
             .pipe(
                 tap(response => {

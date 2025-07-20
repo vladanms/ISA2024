@@ -15,42 +15,50 @@ export class PostComponent {
 	constructor(private postService: PostService) { }
 
   like(): void {
-     this.postService.like()
-      .pipe(
-        tap({
-			next : (response)=> 
+     this.postService.like().subscribe(
+			(response)=> 
 			{
 				if(response && response.success)
 				{
 				alert(response.success);
 				}
 			},
-			error: () => 
+			(error) => 
 			{
-				alert("You must be logged in to do that!")	
+				if(error.status === 403) 
+				{
+        		alert('You must be logged in to do that!');
+        		}
+        		else
+        		{
+				console.log(`${error.message}`);
+            	alert(error?.error?.error);
+            	}
 			}
-        })
-      )
-      .subscribe();
+      );
   }
 
   comment(): void {
-    this.postService.comment()
-      .pipe(
-        tap({
-			next : (response)=> 
+    this.postService.comment().subscribe(
+			(response)=> 
 			{
 				if(response && response.success)
 				{
 				alert(response.success);
 				}
 			},
-			error: () => 
+			(error) => 
 			{
-				alert("You must be logged in to do that!")	
+				if(error.status === 403) 
+				{
+        		alert('You must be logged in to do that!');
+        		}
+        		else
+        		{
+				console.log(`${error.message}`);
+            	alert(error?.error?.error);
+            	}
 			}
-        })
-      )
-      .subscribe();
+      );
   }
 }

@@ -29,6 +29,7 @@ posts: postDTO[] = [];
 	  this.homepageService.logout().subscribe(
       (response) => {
 		  console.log(response);
+		  localStorage.removeItem('loggedUser');
         this.router.navigate(['/login']);
       },
       (error) => {

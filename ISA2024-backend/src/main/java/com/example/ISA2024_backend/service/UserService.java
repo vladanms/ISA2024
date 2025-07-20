@@ -3,7 +3,6 @@ package com.example.ISA2024_backend.service;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,10 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.User.UserBuilder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.ISA2024_backend.dto.LoginDTO;
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.repository.PostRepository;
@@ -39,14 +36,6 @@ public class UserService implements UserDetailsService {
 	private PostRepository posts;
 	private JavaMailSender sender;
 	private final Map<String, List<Long>> loginAttempts = new ConcurrentHashMap<>();
-	private final Map<String, List<Long>> globalActions = new ConcurrentHashMap<>();
- //   private final PasswordEncoder passwordEncoder;
-	
-/*    @Autowired
-    public UserService(UserRepository users, PasswordEncoder passwordEncoder) {
-        this.users = users;
-        this.passwordEncoder = passwordEncoder;
-    }*/
 	
 	public String register(User user) throws MessagingException, UnsupportedEncodingException {
 		User toRegister = users.findByEmail(user.getEmail());
@@ -192,59 +181,4 @@ public class UserService implements UserDetailsService {
 	        loginAttempts.put(ip, attempts);
 	        return "ok";
 	    }
-	 
-	 public synchronized String rateLimiter(String username) {
-		    long currentTime = System.currentTimeMillis();
-		    List<Long> actions = globalActions.getOrDefault(username, new ArrayList<>());
-		    actions.removeIf(attemptTime -> currentTime - attemptTime > TimeUnit.MINUTES.toMillis(1));
-
-		    if (actions.size() >= 5) {
-		    	return TimeUnit.MILLISECONDS.toMinutes(TimeUnit.MINUTES.toMillis(5) - (currentTime - actions.get(0))) + " minutes and " +  
-		    			TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MINUTES.toMillis(5) - (currentTime - actions.get(0))) % 60 + " seconds.";
-		    }
-		    actions.add(currentTime);
-		    globalActions.put(username, actions);
-		    return "ok";
-		}
-	
-/*	public boolean CreatePost(User user, String content, String image)
-	{
-		Post newPost = new Post(user.getUsername(), image, content);
-		ArrayList<Post> posts = user.getPosts();
-		posts.add(newPost);
-		user.setPosts(posts);
-		users.save(user);
-		
-		return true;
-	}
-	
-	public boolean DeletePost(User user, LocalDateTime time)
-	{
-		ArrayList<Post> posts = user.getPosts();
-		for(Post p : user.getPosts())
-		{
-			if(p.getTime() == time)
-			{
-				posts.remove(p);
-				user.setPosts(posts);
-			}
-		}
-		users.save(user);
-		return true;
-	}
-	
-	public ArrayList<Post> getPostsByUser(User user)
-	{
-		return user.getPosts();
-	}
-	
-	public ArrayList<Post> getAllPosts()
-	{
-		ArrayList<Post> posts = new ArrayList<Post>();
-		for(User u : users.findAll())
-		{
-			posts.addAll(u.getPosts());
-		}
-		return posts;
-	}	*/
 }

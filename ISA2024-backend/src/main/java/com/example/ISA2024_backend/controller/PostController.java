@@ -101,6 +101,11 @@ public class PostController {
 	public ResponseEntity<Map <String, String>> comment()
 	{
 		Map<String, String> response = new HashMap<>();
+		 String limiter = postService.rateLimiter();
+		  if (!limiter.equals("ok")) {
+		            response.put("error", ("You're doing that too often. Please try again in " + limiter));
+		            return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
+		        }
 		response.put("success", "You left a comment!");
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -109,6 +114,11 @@ public class PostController {
 	public ResponseEntity<Map <String, String>> like()
 	{
 		Map<String, String> response = new HashMap<>();
+		 String limiter = postService.rateLimiter();
+		  if (!limiter.equals("ok")) {
+		            response.put("error", ("You're doing that too often. Please try again in " + limiter));
+		            return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
+		        }
 		response.put("success", "You liked a post!");
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

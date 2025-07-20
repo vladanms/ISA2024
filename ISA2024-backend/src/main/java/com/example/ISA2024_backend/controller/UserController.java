@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.HashSet;
 import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,14 +18,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.example.ISA2024_backend.dto.LoginDTO;
 import com.example.ISA2024_backend.dto.RegisterDTO;
@@ -51,7 +50,6 @@ public class UserController{
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
-	private User currentUser;
 	
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request){
@@ -86,17 +84,24 @@ public class UserController{
 	@PostMapping("/logout")
 	public ResponseEntity<Map<String, String>> logout(@RequestBody String username){
 		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		 Map<String, String> response = new HashMap<>();
 		    try {
-		        if (currentUser == null) {
+		        if (authentication == null) {
 		            response.put("error", "No user is logged in.");
 		            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		        }
-		    	if(currentUser.getUsername().equals(username))
+		    	if(authentication.getName().equals(username))
 		    	{
 			    userService.setLastActive(username);
 		    	response.put("username", username);
-		    	currentUser = null;
+		    	
+		        new SecurityContextLogoutHandler().logout(
+		        ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest(),
+		        ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse(),
+		        authentication
+		        );
+		        
 			    return new ResponseEntity<>(response, HttpStatus.OK);
 		    	}
 		    	response.put("error", "Username mismatch error.");
@@ -146,7 +151,6 @@ public class UserController{
 			response.put("error", "This e-mail is already registered.");
 			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 		}
-		//userService.verificationEmail(user);
 		response.put("registered", userDTO.getUsername());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		 } catch (Exception e) {

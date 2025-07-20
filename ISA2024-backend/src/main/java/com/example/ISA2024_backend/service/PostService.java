@@ -1,37 +1,41 @@
 package com.example.ISA2024_backend.service;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
-import com.example.ISA2024_backend.model.Comment;
 import com.example.ISA2024_backend.repository.PostRepository;
 import com.example.ISA2024_backend.repository.UserRepository;
 
 @Service
 public class PostService {
 
-	 @Value("${image.directory:images}")
-	 private String imageDirectory;
+	@Value("${image.directory:images}")
+	private String imageDirectory;
+	private final Map<String, List<Long>> globalActions = new ConcurrentHashMap<>();
 
 	@Autowired
 	private PostRepository posts;
+	
+	@Autowired
+	private UserRepository users;
 	
 	public Boolean createPost(User owner, MultipartFile image, String content, Float location_x, Float location_y)  throws IOException
 	{
@@ -89,4 +93,20 @@ public class PostService {
         }
 	}
 	 
+	 public synchronized String rateLimiter() {
+		 
+		 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		    long currentTime = System.currentTimeMillis();
+		    List<Long> actions = globalActions.getOrDefault(authentication.getName(), new ArrayList<>());
+		    actions.removeIf(attemptTime -> currentTime - attemptTime > TimeUnit.MINUTES.toMillis(1));
+
+		    if (actions.size() >= 5) {
+		    	return TimeUnit.MILLISECONDS.toMinutes(TimeUnit.MINUTES.toMillis(1) - (currentTime - actions.get(0))) + " minutes and " +  
+		    			TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MINUTES.toMillis(1) - (currentTime - actions.get(0))) % 60 + " seconds.";
+		    }
+		    actions.add(currentTime);
+		    globalActions.put(authentication.getName(), (actions));
+		    return "ok";
+		}
+	
 }
