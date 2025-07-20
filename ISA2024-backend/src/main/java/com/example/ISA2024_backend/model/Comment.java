@@ -21,13 +21,13 @@ public class Comment {
 	}
 
 
-	public String getUsers() {
+	public String getAuthor() {
 		return author;
 	}
 
 
-	public void setUsers(String users) {
-		this.author = users;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 

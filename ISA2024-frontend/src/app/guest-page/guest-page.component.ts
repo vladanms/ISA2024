@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { GuestPageService } from '../service/guest-page-service';
+//import { GuestPageService } from '../service/guest-page-service';
+import { PostService } from '../service/post-service';
 import { postDTO } from '../dto/postDTO';
 
 @Component({
@@ -11,24 +12,16 @@ export class GuestPageComponent {
 
   posts: postDTO[] = [];
 
-  constructor(private guestPageService: GuestPageService) {}
+  constructor(private postService: PostService) {}
 
   ngOnInit(): void {
     this.loadPosts();
   }
 
   loadPosts(): void {
-    this.guestPageService.getPosts().subscribe({
+    this.postService.getPosts().subscribe({
       next: (data) => this.posts = data,
       error: (err) => console.error('Error loading posts:', err)
     });
-  }
-
-  like(id: number): void {
-	  console.log('you liked the post with the id of: ', id);
-  }
-
-  comment(id: number): void {
-	  console.log('you commented on the post with the id of: ', id);
   }
 }

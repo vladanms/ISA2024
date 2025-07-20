@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ISA2024_backend.dto.CreatePostDTO;
 import com.example.ISA2024_backend.dto.PostDTO;
+import com.example.ISA2024_backend.model.Comment;
 import com.example.ISA2024_backend.model.Post;
 import com.example.ISA2024_backend.model.User;
 import com.example.ISA2024_backend.service.PostService;
@@ -89,6 +90,10 @@ public class PostController {
 			        post.getLocation_x(),
 			        post.getLocation_y()
 			    );
+	        	for (Comment comment : dto.getComments())
+	        	{
+	        		System.out.println(comment.getAuthor() + "says: " + comment.getContent());
+	        	}
 			    posts.add(dto);
 			}
 			return new ResponseEntity<List<PostDTO>>(posts, HttpStatus.OK);			

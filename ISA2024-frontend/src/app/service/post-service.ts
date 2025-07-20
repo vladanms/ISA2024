@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { postDTO } from '../dto/postDTO';
-import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GuestPageService {
+export class PostService {
 	apiHost: string = 'http://localhost:8091/';
   	headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
   

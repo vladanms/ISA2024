@@ -1,1 +1,24 @@
-<p>post works!</p>
+<html>
+<div *ngFor="let post of posts" class="post">
+  {{ post.owner }}
+  on {{ post.location_x }}, {{ post.location_y }} posted on {{ post.time }}:
+  <p></p>
+  <hr>
+  <hr>
+  <img [src]="'http://localhost:8091/' + post.imagePath"
+       alt="Post image"
+       width="300"
+       style="display: block; margin-bottom: 10px;" />
+  <p></p>
+  <div>{{ post.content }}</div>
+  <button (click)="like(post.id)">Like</button>
+  <button (click)="comment(post.id)">Comment</button>
+  <hr>
+  <div>{{ post.likes.length || 0 }} users like this.</div>
+  <hr>
+  <mat-label>Comments:</mat-label>
+  <div *ngFor="let comment of post.comments">{{ comment.author }}: {{ comment.content }}</div>
+  <hr>
+  <p></p>
+  <p></p>
+</div>
