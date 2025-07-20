@@ -197,23 +197,6 @@ public class UserService implements UserDetailsService {
 		}
 	}
 	
-	public boolean verification(String username, String verification)
-	{
-		User user = (User) users.findByUsername(username);
-		if(user!= null)
-		{
-			if(user.getVerification().equals(verification))
-			{
-					user.setAuthorized(true);
-					user.setVerification(null);
-					users.save(user);
-					return true;
-			}	
-			return false;
-		}
-		return false;
-	}
-	
 	 public synchronized String loginLimiter(String ip) {
 	        long currentTime = System.currentTimeMillis();
 	        List<Long> attempts = loginAttempts.getOrDefault(ip, new ArrayList<>());
