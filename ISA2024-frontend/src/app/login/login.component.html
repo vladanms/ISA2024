@@ -1,5 +1,9 @@
 <html>
-	<header>Login</header>
+
+	<header class  = "subpage-header">			
+	<div class  = "blocker"></div>
+	<div class="subpage-header-component">Login</div>
+	</header>
 	<p></p>
 <div class="login-form">
   <h2>Login</h2>
@@ -13,10 +17,10 @@
     <button type="submit">Login</button>
   </form>
 </div>
-		<mat-label>Not a user? Register here:</mat-label>
-		<button mat-flat-button  (click) = "register()">Register</button>
+		<label>Not a user? Register here:</label>
+		<button (click) = "register()">Register</button>
 		<p></p>
-		<mat-label>...or continue as a guest:</mat-label>
-		<button mat-flat-button (click) = "guestLogin()">Continue</button>
+		<label>...or continue as a guest:</label>
+		<button (click) = "guestLogin()">Continue</button>
 		<p></p>
 </html>

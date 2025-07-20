@@ -1,14 +1,17 @@
-<html>
+<div class="post-container">
 <div *ngFor="let post of posts" class="post">
-  {{ post.owner }}
+	<div>
+  <span style = "font-size : 1.2rem; font-weight : bold">{{ post.owner }}</span>
   on {{ post.location_x }}, {{ post.location_y }} posted on {{ post.time }}:
+	</div>
   <p></p>
   <hr>
   <hr>
-  <img [src]="'http://localhost:8091/' + post.imagePath"
+  <img class="post-image"
+       [src]="'http://localhost:8091/' + post.imagePath"
        alt="Post image"
        width="300"
-       style="display: block; margin-bottom: 10px;" />
+       />
   <p></p>
   <div>{{ post.content }}</div>
   <button (click)="like()">Like</button>
@@ -16,9 +19,10 @@
   <hr>
   <div>{{ post.likes.length || 0 }} users like this.</div>
   <hr>
-  <mat-label>Comments:</mat-label>
+  <label style = "font-size : 1.2rem; font-weight : bold">Comments:</label>
   <div *ngFor="let comment of post.comments">{{ comment.author }}: {{ comment.content }}</div>
   <hr>
   <p></p>
   <p></p>
+</div>
 </div>

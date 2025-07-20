@@ -1,12 +1,14 @@
 <html>
-	<header>			
-			<button mat-flat-button (click)="createPost()">Create post</button>
-			<button mat-flat-button>My posts</button>
-			<button mat-flat-button>Followers</button>
-			<button mat-flat-button>My follows</button>
-			<button mat-flat-button>Post feed</button>
-			<button mat-flat-button>Settings</button>
-			<button mat-flat-button (click)="logout()">Logout</button>
+	<header class  = "subpage-header">				<div class  = "blocker"></div>
+	  <div class="subpage-header-component">
+			<button (click)="createPost()">Create post</button>
+			<button>My posts</button>
+			<button>Followers</button>
+			<button>My follows</button>
+			<button>Post feed</button>
+			<button>Settings</button>
+			<button (click)="logout()">Logout</button>
+	  </div>
 	</header>
 	<app-post [posts]="posts"></app-post>
 </html>

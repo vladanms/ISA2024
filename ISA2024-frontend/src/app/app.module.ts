@@ -24,6 +24,7 @@ import { PostComponent } from './post/post.component';
 import { GuestPageComponent } from './guest-page/guest-page.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { MyPostsComponent } from './my-posts/my-posts.component';
+import { MainHeaderComponent } from './main-header/main-header.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MyPostsComponent } from './my-posts/my-posts.component';
     PostComponent,
     GuestPageComponent,
     CreatePostComponent,
-    MyPostsComponent
+    MyPostsComponent,
+    MainHeaderComponent
   ],
   imports: [
     BrowserModule,
